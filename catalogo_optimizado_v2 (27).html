@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>TÉMPORAL — Drop II: The Court Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #0B1E33;
+    --azul: #2F6690;
+    --celeste: #9FD8E8;
+    --cristal: #F4FAFC;
+    --blanco: #FFFFFF;
+    --glass-border: rgba(255,255,255,0.35);
+    --glass-fill: rgba(255,255,255,0.08);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{
+    -webkit-text-size-adjust:100%;
+  }
+  body{
+    background: #060708;
+    font-family:'Space Grotesk', sans-serif;
+    color: var(--cristal);
+    min-height:100vh;
+    overflow-x:hidden;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .wrap{max-width:1100px; margin:0 auto; padding:0 24px;}
+
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:calc(28px + env(safe-area-inset-top)) 24px 28px;
+    gap:12px;
+    position:absolute; top:0; left:0; right:0; z-index:20;
+    background:transparent;
+  }
+  @media (max-width:420px){
+    header{ padding:calc(16px + env(safe-area-inset-top)) 16px 16px; }
+    .brand-name{ font-size:16px; letter-spacing:0.1em; }
+    .logo-img{ width:32px; height:32px; }
+    nav a{ font-size:10px; margin-left:14px; letter-spacing:0.1em; }
+    .hero{
+      min-height:calc(100vh - 72px);
+      min-height:calc(100svh - 72px);
+      padding:20px;
+    }
+    .story-section{
+      min-height:calc(100vh - 72px);
+      min-height:calc(100svh - 72px);
+      padding:20px;
+    }
+  }
+  .logo-slot{
+    display:flex; align-items:center; gap:12px;
+  }
+  .logo-placeholder{
+    width:44px; height:44px;
+    border:1.5px dashed var(--glass-border);
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--glass-fill);
+  }
+  .logo-img{
+    width:40px; height:40px;
+    object-fit:contain;
+    filter: drop-shadow(0 0 6px rgba(159,216,232,0.5));
+  }
+  .brand-name{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:20px;
+    letter-spacing:0.14em;
+  }
+  nav a{
+    color:var(--cristal);
+    text-decoration:none;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    opacity:0.65;
+    margin-left:22px;
+  }
+
+  .hero{
+    position:relative;
+    text-align:center;
+    padding:24px;
+    min-height:100vh;
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background-color:#060708;
+  }
+  .hero > *{ position:relative; z-index:2; }
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    opacity:0.65;
+    margin-bottom:18px;
+  }
+  .hero h1{
+    font-family:'Fraunces', serif;
+    font-weight:300;
+    font-size:clamp(38px, 7vw, 74px);
+    line-height:1.05;
+    letter-spacing:-0.01em;
+  }
+  .hero h1 em{
+    font-style:italic;
+    font-weight:500;
+  }
+  .hero p{
+    max-width:480px;
+    margin:22px auto 0;
+    font-size:12px;
+    line-height:1.6;
+    opacity:0.65;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+  }
+
+  .signature-img{
+    width:150px;
+    margin:34px auto 0;
+    display:block;
+  }
+
+  section.catalog{
+    padding:12px 24px 56px;
+  }
+  .story-section{
+    position:relative;
+    padding:24px;
+    min-height:calc(100vh - 100px);
+    min-height:calc(100svh - 100px);
+    display:flex;
+    align-items:center;
+    overflow:hidden;
+    background-color:#060708;
+  }
+  .story-section::before{ z-index:0; }
+  .join-overlap{
+    box-shadow: inset 0 90px 60px -60px #060708;
+  }
+  .story-overlay-dark{
+    position:absolute; inset:0;
+    background:linear-gradient(90deg, #050505 0%, rgba(5,5,5,0.85) 30%, rgba(5,5,5,0.25) 55%, transparent 75%);
+    z-index:0;
+  }
+  .story-section .wrap{ position:relative; z-index:1; }
+  .drops-bg-wrapper{
+    position:relative;
+    background-repeat:no-repeat;
+    background-size:100% 100%;
+    background-position:top center;
+  }
+  .drops-bg-wrapper .hero,
+  .drops-bg-wrapper .story-section{
+    background-color:transparent;
+  }
+  .drops-bg-wrapper .story-section::before,
+  .drops-bg-wrapper .story-section::after{
+    content:none;
+  }
+  #story-drop1::before{ content:none; }
+.story-section::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:url('https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_1.jpeg');
+    background-size:cover;
+    background-position:center 78%;
+    filter:grayscale(1) contrast(1.05);
+    opacity:0.16;
+    z-index:0;
+  }
+  .story-section::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(ellipse at center, transparent 0%, rgba(6,7,8,0.55) 70%, rgba(6,7,8,0.85) 100%);
+    z-index:0;
+  }
+  .story-section .wrap{
+    width:100%;
+    position:relative;
+    z-index:1;
+  }
+  .story-grid{
+    display:grid;
+    grid-template-columns:1fr 220px;
+    gap:40px;
+    align-items:start;
+  }
+  @media (max-width:720px){
+    .story-grid{grid-template-columns:1fr;}
+    .story-year{order:-1; text-align:left; font-size:56px; opacity:0.18; margin-bottom:-10px;}
+  }
+  .story-col{
+    max-width:480px;
+    text-align:left;
+  }
+  .story-kicker{
+    font-size:11px;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    opacity:0.6;
+    margin-bottom:16px;
+  }
+  .story-divider{
+    width:42px;
+    height:1px;
+    background:var(--glass-border);
+    margin-bottom:26px;
+  }
+  .story-text{
+    font-size:15px;
+    line-height:1.85;
+    opacity:0.85;
+    text-align:left;
+  }
+  .story-signature-wrap{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:22px;
+  }
+  .story-signature{
+    width:90px;
+    opacity:0.85;
+  }
+  .story-year{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:300;
+    font-size:92px;
+    line-height:1;
+    text-align:right;
+    opacity:0.26;
+    padding-top:4px;
+  }
+  .collection-divider{
+    text-align:center;
+    padding:20px 24px 8px;
+  }
+  .collection-divider .line{
+    width:100%;
+    max-width:1100px;
+    margin:0 auto 22px;
+    height:1px;
+    background:var(--glass-border);
+  }
+  .collection-divider span{
+    font-size:11px;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    opacity:0.5;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+  }
+  @media (max-width:720px){
+    .grid{grid-template-columns:1fr;}
+  }
+
+  .card{
+    background:var(--glass-fill);
+    border:1px solid var(--glass-border);
+    border-radius:16px;
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+  .photo-slot{
+    position:relative;
+    aspect-ratio:4/3;
+    background:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 14px),
+      rgba(255,255,255,0.04);
+    border-bottom:1px solid var(--glass-border);
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column;
+    gap:8px;
+  }
+  .cover-img{
+    width:100%; height:100%;
+    object-fit:cover;
+  }
+  .photo-desc{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    padding:60px 26px 26px;
+    background:linear-gradient(180deg, transparent 0%, rgba(4,5,6,0.55) 45%, rgba(4,5,6,0.92) 100%);
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:400;
+    font-size:15px;
+    line-height:1.55;
+    color:var(--cristal);
+    opacity:0.95;
+    pointer-events:none;
+  }
+  @media (max-width:480px){
+    .photo-desc{
+      font-size:13.5px;
+      padding:50px 18px 20px;
+    }
+  }
+  .gallery-trigger{
+    position:relative;
+    cursor:pointer;
+  }
+  .card-title-overlay{
+    position:absolute;
+    top:0; left:0; right:0;
+    padding:22px 22px 40px;
+    background:linear-gradient(180deg, rgba(4,5,6,0.85) 0%, rgba(4,5,6,0.5) 60%, transparent 100%);
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:19px;
+    line-height:1.3;
+    color:var(--celeste);
+    opacity:0;
+    transform:translateY(-6px);
+    transition:opacity 0.3s ease, transform 0.3s ease;
+    pointer-events:none;
+  }
+  .ctitle-drop{
+    display:block;
+    font-family:'Space Grotesk', sans-serif;
+    font-size:10px;
+    font-weight:400;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--cristal);
+    opacity:0.6;
+    margin-bottom:8px;
+  }
+  .gallery-trigger:hover .card-title-overlay{
+    opacity:1;
+    transform:translateY(0);
+  }
+  @media (hover:none){
+    .card-title-overlay{
+      opacity:1;
+      transform:translateY(0);
+      padding:18px 18px 32px;
+      font-size:16px;
+    }
+  }
+  .card-colors-overlay{
+    position:absolute;
+    left:0; bottom:0; right:0;
+    padding:34px 22px 20px;
+    background:linear-gradient(0deg, rgba(4,5,6,0.88) 0%, rgba(4,5,6,0.5) 55%, transparent 100%);
+    opacity:0;
+    transform:translateY(6px);
+    transition:opacity 0.3s ease, transform 0.3s ease;
+    pointer-events:none;
+  }
+  .ccolors-label{
+    display:block;
+    font-family:'Space Grotesk', sans-serif;
+    font-size:10px;
+    font-weight:400;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--cristal);
+    opacity:0.6;
+    margin-bottom:8px;
+  }
+  .ccolors-row{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .ccolor-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-family:'Space Grotesk', sans-serif;
+    font-size:12px;
+    color:var(--cristal);
+    opacity:0.9;
+  }
+  .gallery-trigger:hover .card-colors-overlay{
+    opacity:1;
+    transform:translateY(0);
+  }
+  @media (hover:none){
+    .card-colors-overlay{
+      opacity:1;
+      transform:translateY(0);
+      padding:28px 18px 16px;
+    }
+  }
+  .press-hint{
+    text-align:center;
+    font-size:11px;
+    letter-spacing:0.25em;
+    text-transform:lowercase;
+    opacity:0.5;
+    margin-bottom:10px;
+  }
+  .enter-gate{
+    position:fixed;
+    inset:0;
+    background:#060708;
+    z-index:2000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:opacity 0.8s ease;
+  }
+  .enter-gate.hidden{
+    opacity:0;
+    pointer-events:none;
+  }
+  .enter-content{
+    text-align:center;
+  }
+  .enter-eyebrow{
+    font-size:11px;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    opacity:0.55;
+    margin-bottom:14px;
+  }
+  .enter-title{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:34px;
+    color:var(--cristal);
+    margin-bottom:34px;
+  }
+  .enter-btn{
+    -webkit-appearance:none;
+    appearance:none;
+    font-family:'Space Grotesk', sans-serif;
+    background:transparent;
+    color:var(--cristal);
+    border:1px solid var(--glass-border);
+    border-radius:100px;
+    padding:12px 40px;
+    font-size:12px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:background 0.2s ease, color 0.2s ease;
+  }
+  .enter-btn:hover{
+    background:var(--celeste);
+    color:var(--navy);
+  }
+  .enter-sub{
+    margin-top:16px;
+    font-size:10px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    opacity:0.4;
+  }
+  .music-toggle{
+    -webkit-appearance:none;
+    appearance:none;
+    position:fixed;
+    bottom:calc(22px + env(safe-area-inset-bottom));
+    right:calc(22px + env(safe-area-inset-right));
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.06);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(10px);
+    color:var(--cristal);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:900;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.4s ease;
+  }
+  .music-toggle.visible{
+    opacity:0.8;
+    pointer-events:auto;
+  }
+  .music-toggle:hover{
+    opacity:1;
+  }
+  .gallery-hint{
+    position:absolute;
+    bottom:14px;
+    right:14px;
+    background:rgba(0,0,0,0.55);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(6px);
+    color:var(--cristal);
+    font-size:10px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    padding:6px 12px;
+    border-radius:100px;
+    opacity:0;
+    transition:opacity 0.25s ease;
+  }
+  .gallery-trigger:hover .gallery-hint{
+    opacity:1;
+  }
+  .lightbox{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(3,4,5,0.97);
+    z-index:1000;
+    align-items:center;
+    justify-content:center;
+    padding:calc(40px + env(safe-area-inset-top)) calc(24px + env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));
+    overflow-y:auto;
+  }
+  .lightbox.active{
+    display:flex;
+  }
+  .lightbox-layout{
+    display:grid;
+    grid-template-columns:250px minmax(0,auto) 240px;
+    gap:36px;
+    align-items:center;
+    max-width:1180px;
+    width:100%;
+  }
+  .lightbox-story{
+    text-align:left;
+  }
+  .lightbox-story-kicker{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:20px;
+    margin-bottom:14px;
+  }
+  .lightbox-story-divider{
+    width:36px;
+    height:1px;
+    background:var(--glass-border);
+    margin-bottom:20px;
+  }
+  .lightbox-story-text{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:400;
+    font-size:15px;
+    line-height:1.75;
+    opacity:0.85;
+  }
+  .lightbox-center{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+  }
+  .lightbox-stage{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+  }
+  .lightbox-img{
+    max-width:min(400px, 60vw);
+    max-height:60vh;
+    object-fit:contain;
+    border-radius:4px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.6);
+  }
+  .lightbox-thumbs{
+    display:flex;
+    gap:10px;
+  }
+  .lightbox-thumb{
+    width:52px;
+    height:65px;
+    object-fit:cover;
+    border-radius:3px;
+    opacity:0.45;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:opacity 0.2s ease, border-color 0.2s ease;
+  }
+  .lightbox-thumb:hover{
+    opacity:0.75;
+  }
+  .lightbox-thumb.active{
+    opacity:1;
+    border-color:var(--celeste);
+  }
+  .lightbox-buy{
+    text-align:left;
+  }
+  .lightbox-buy-name{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:17px;
+    line-height:1.3;
+    margin-bottom:14px;
+  }
+  .lightbox-buy-price{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .lightbox-materials{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:6px;
+    margin-bottom:26px;
+  }
+  .lightbox-materials li{
+    padding:0;
+  }
+  .lightbox-materials li::before{
+    content:none;
+  }
+  .lightbox-cta{
+    display:inline-block;
+    width:100%;
+    text-align:center;
+  }
+  @media (max-width:980px){
+    .lightbox-layout{
+      grid-template-columns:1fr;
+      gap:26px;
+      text-align:center;
+    }
+    .lightbox-story{ order:2; text-align:center; }
+    .lightbox-story-divider{ margin-left:auto; margin-right:auto; }
+    .lightbox-center{ order:1; }
+    .lightbox-buy{ order:3; text-align:center; }
+    .lightbox-buy-price{ justify-content:center; }
+  }
+  @media (max-width:720px){
+    .lightbox-thumb{ width:42px; height:54px; }
+  }
+  .lightbox-close{
+    position:absolute;
+    top:calc(22px + env(safe-area-inset-top));
+    right:calc(28px + env(safe-area-inset-right));
+    font-size:32px;
+    color:var(--cristal);
+    opacity:0.7;
+    cursor:pointer;
+    line-height:1;
+  }
+  .lightbox-close:hover{ opacity:1; }
+  .lightbox-counter{
+    position:absolute;
+    top:calc(28px + env(safe-area-inset-top));
+    left:calc(28px + env(safe-area-inset-left));
+    font-size:11px;
+    letter-spacing:0.14em;
+    color:var(--cristal);
+    opacity:0.6;
+  }
+  .lightbox-arrow{
+    font-size:36px;
+    color:var(--cristal);
+    opacity:0.5;
+    cursor:pointer;
+    user-select:none;
+    padding:10px 6px;
+    transition:opacity 0.2s ease;
+    flex-shrink:0;
+  }
+  .lightbox-arrow:hover{ opacity:1; }
+  @media (max-width:980px){
+    .lightbox-arrow{ font-size:28px; }
+  }
+  @media (max-width:720px){
+    .lightbox-arrow{ font-size:34px; padding:6px 10px; }
+    .lightbox-close{ top:16px; right:18px; font-size:28px; }
+  }
+  .photo-slot span{
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    opacity:0.5;
+  }
+
+  .card-body{padding:0; display:flex; flex-direction:column; gap:12px;}
+  .drop-tag{
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    opacity:0.6;
+  }
+  .card-body h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:24px;
+  }
+  .price-block{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .price-row{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+  }
+  .price-new{
+    font-size:22px;
+    font-weight:700;
+    color:#34D399;
+  }
+  .price-old{
+    font-size:14px;
+    font-weight:400;
+    text-decoration:line-through;
+    opacity:0.45;
+  }
+  .price-caption{
+    font-size:10px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:#34D399;
+    opacity:0.85;
+  }
+
+  .block-label{
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    opacity:0.55;
+    margin-bottom:8px;
+  }
+
+  .sizes{display:flex; gap:8px; flex-wrap:wrap;}
+  .size-pill{
+    border:1px solid var(--glass-border);
+    border-radius:100px;
+    padding:8px 15px;
+    font-size:13px;
+    opacity:0.85;
+  }
+
+  .colors{display:flex; gap:14px; align-items:center; flex-wrap:wrap; row-gap:8px;}
+  .color-item{display:flex; align-items:center; gap:6px; font-size:12px; opacity:0.85;}
+  .swatch{width:14px; height:14px; border-radius:50%; border:1px solid rgba(255,255,255,0.4);}
+  .sw-marine{background:#1B3A5C;}
+  .sw-champagne{background:#E4D3B4;}
+  .sw-olive{background:#5B6B4E;}
+  .sw-ivory{background:#F3ECDF;}
+
+  .materials-list{
+    list-style:none;
+    display:flex;
+    flex-wrap:wrap;
+    row-gap:6px;
+    column-gap:0;
+    font-size:11px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    opacity:0.55;
+    line-height:1.6;
+  }
+  .materials-list li{
+    position:relative;
+    padding:0 12px;
+  }
+  .materials-list li:not(:first-child)::before{
+    content:"•";
+    position:absolute;
+    left:0;
+  }
+  .materials-list li:first-child{
+    padding-left:0;
+  }
+  .desc{
+    font-size:13px;
+    line-height:1.65;
+    opacity:0.75;
+  }
+  .x{
+    opacity:0.5;
+    font-weight:400;
+    font-size:0.75em;
+  }
+  .card-body h2{
+    line-height:1.2;
+  }
+
+  .cta{
+    margin-top:6px;
+    padding:13px;
+    text-align:center;
+    border-radius:100px;
+    border:1px solid var(--celeste);
+    color:var(--navy);
+    background:var(--celeste);
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-decoration:none;
+  }
+
+  footer{
+    text-align:center;
+    padding:40px 24px 50px;
+    font-size:12px;
+    opacity:0.5;
+    letter-spacing:0.06em;
+  }
+</style>
+</head>
+<body>
+
+<div id="enterGate" class="enter-gate">
+  <div class="enter-content">
+    <div class="enter-eyebrow">Témporal — Drop II</div>
+    <div class="enter-title">The Court Club</div>
+    <button id="enterBtn" class="enter-btn" onclick="enterSite()">Enter</button>
+    <div class="enter-sub">Con sonido</div>
+  </div>
+</div>
+
+<button id="musicToggle" class="music-toggle" onclick="toggleMusic()">
+  <svg id="musicIconOn" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+  <svg id="musicIconOff" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" style="display:none"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/><line x1="3" y1="3" x2="21" y2="21"/></svg>
+</button>
+
+<audio id="bgAudio" loop preload="auto"><source src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/theme-song.mp3" type="audio/mpeg"></audio>
+
+<header>
+  <div class="logo-slot">
+    <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_2.webp" alt="Témporal" class="logo-img">
+    <div class="brand-name">TÉMPORAL</div>
+  </div>
+  <nav>
+    <a href="#catalog">Catálogo</a>
+    <a href="#">Contacto</a>
+  </nav>
+</header>
+
+<div class="drops-bg-wrapper" style="background-image:url('https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_14_fondo_drops.webp');">
+
+<div class="hero" id="hero-drop1" style="background-image:linear-gradient(rgba(0,0,0,0.25),rgba(0,0,0,0.25));">
+  <div class="eyebrow">Drop I — Edición limitada</div>
+  <h1>Diamond<br><em>Swing</em></h1>
+  <p>Donde la precisión se convierte en brillo, y cada golpe se juega con clase</p>
+  <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_3.webp" alt="Firma Témporal" class="signature-img">
+</div>
+
+<section class="story-section" id="story-drop1">
+  <div class="story-overlay-dark"></div>
+  <div class="wrap story-grid">
+    <div class="story-col">
+      <div class="story-kicker">The Story</div>
+      <div class="story-divider"></div>
+      <p class="story-text">Diamond Swing nace de la precisión y el brillo del golpe perfecto. Inspirado en el destello del diamante en cada movimiento sobre la cancha, este drop reinterpreta el rigor del tenis clásico con un lenguaje contemporáneo: cortes limpios, texturas sutiles y un guiño a la elegancia atemporal. Una pieza pensada para quienes entienden que cada swing puede ser una declaración de estilo.</p>
+      <div class="story-signature-wrap">
+        <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_4.webp" alt="Firma Témporal" class="story-signature">
+      </div>
+      <div class="story-year">2026</div>
+    </div>
+  </div>
+</section>
+
+<div class="hero" id="hero-drop2" style="background-image:linear-gradient(rgba(0,0,0,0.25),rgba(0,0,0,0.25));">
+  <div class="eyebrow">Drop II — Edición limitada</div>
+  <h1>The Court<br><em>Club</em></h1>
+  <p>Donde cada punto se juega con clase, y cada victoria se celebra con estilo</p>
+  <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_3.webp" alt="Firma Témporal" class="signature-img">
+</div>
+
+<section class="story-section" id="story-drop2">
+  <div class="wrap story-grid">
+    <div class="story-col">
+      <div class="story-kicker">The Story</div>
+      <div class="story-divider"></div>
+      <p class="story-text">En 1926, René Lacoste transformó la historia del tenis al sustituir la rígida camisa de competición por una prenda de cuello suave y manga corta, dando origen al polo que redefiniría la elegancia dentro y fuera de la cancha. Campeón de siete títulos de Grand Slam y figura de los legendarios "Cuatro Mosqueteros", su legado trascendió el deporte para convertirse en un referente de estilo y distinción. Inspirado en esa herencia y en la esencia contemporánea de Miami, nace The Court Club: una colección que lleva el espíritu del club más allá de la cancha.</p>
+      <div class="story-signature-wrap">
+        <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_4.webp" alt="Firma Témporal" class="story-signature">
+      </div>
+    </div>
+    <div class="story-year">1926</div>
+  </div>
+</section>
+
+</div>
+
+<div class="collection-divider">
+  <div class="line"></div>
+  <span>The Collection ↓</span>
+</div>
+
+<section class="catalog" id="catalog">
+  <div class="press-hint">(press)</div>
+  <div class="wrap grid">
+
+    <div class="card">
+      <div class="photo-slot gallery-trigger" onclick="openGallery('navy', 0)">
+        <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_5.webp" alt="Midnight Navy" class="cover-img">
+        <a href="#story-drop1" style="text-decoration:none;color:inherit;display:block;"><a href="#story-drop2" style="text-decoration:none;color:inherit;display:block;"><div class="card-title-overlay"><span class="ctitle-drop">Drop II · The Court Club</span>Midnight Navy <span class="x">×</span> Ivory Cream</div></a>
+        <div class="card-colors-overlay">
+          <span class="ccolors-label">Colors</span>
+          <div class="ccolors-row">
+            <span class="ccolor-item"><span class="swatch sw-marine"></span>Marine Blue</span>
+            <span class="ccolor-item"><span class="swatch sw-ivory"></span>Ivory Cream</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="photo-slot gallery-trigger" onclick="openGallery('olive', 0)">
+        <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_6.webp" alt="Wimbledon Green" class="cover-img">
+        <div class="card-title-overlay"><span class="ctitle-drop">Drop II · The Court Club</span>Sand Ivory <span class="x">×</span> Olive Grove</div></a>
+        <div class="card-colors-overlay">
+          <span class="ccolors-label">Colors</span>
+          <div class="ccolors-row">
+            <span class="ccolor-item"><span class="swatch sw-champagne"></span>Sand Ivory</span>
+            <span class="ccolor-item"><span class="swatch sw-olive"></span>Olive Grove</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  TÉMPORAL — Ica, Perú · Pedidos por Instagram/WhatsApp
+</footer>
+
+
+<div id="lightbox" class="lightbox">
+  <div class="lightbox-close" onclick="closeGallery()">&times;</div>
+  <div class="lightbox-counter" id="lightboxCounter"></div>
+
+  <div class="lightbox-layout">
+
+    <div class="lightbox-story">
+      <div class="lightbox-story-kicker">The Story</div>
+      <div class="lightbox-story-divider"></div>
+      <p class="lightbox-story-text" id="lightboxStoryText"></p>
+    </div>
+
+    <div class="lightbox-center">
+      <div class="lightbox-arrow lightbox-prev" onclick="changeSlide(-1)">&#8249;</div>
+      <div class="lightbox-stage">
+        <img id="lightboxImg" class="lightbox-img" src="" alt="">
+        <div class="lightbox-thumbs" id="lightboxThumbs"></div>
+      </div>
+      <div class="lightbox-arrow lightbox-next" onclick="changeSlide(1)">&#8250;</div>
+    </div>
+
+    <div class="lightbox-buy">
+      <div class="lightbox-buy-name" id="lightboxBuyName"></div>
+      <div class="lightbox-buy-price">
+        <span class="price-new">S/ 60</span>
+        <span class="price-old">S/ 75</span>
+      </div>
+      <ul class="materials-list lightbox-materials" id="lightboxMaterials"></ul>
+      <a class="cta lightbox-cta" href="#">Consultar disponibilidad</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const navyImages = [
+    "https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_7.png",
+    "https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_8.png",
+    "https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_9.png",
+    "https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_10.png"
+  ];
+
+  const oliveImages = [
+    "https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_11.png"
+  ];
+
+  const products = {
+    navy: {
+      images: navyImages,
+      name: 'Midnight Navy <span class="x">×</span> Ivory Cream',
+      alt: 'Midnight Navy',
+      story: 'La combinación Marine Blue y Champagne Sand recupera la elegancia clásica de los clubes de tenis. Su diseño equilibra líneas limpias, detalles bordados y una silueta contemporánea para crear una pieza versátil, pensada para trascender temporadas.',
+      priceNew: 'S/ 60',
+      priceOld: 'S/ 75',
+      materials: ["100% Algodón Pima Gamuzado", "Bordado de alta precisión", "Cuello resort estructurado", "Fit Oversized", "Acabados reforzados"]
+    },
+    olive: {
+      images: oliveImages,
+      name: 'Sand Ivory <span class="x">×</span> Olive Grove',
+      alt: 'Sand Ivory',
+      story: 'La unión de Sand Ivory y Heritage Olive aporta una estética sobria y atemporal. Sus contrastes sutiles y bordados cuidadosamente elaborados convierten esta pieza en una reinterpretación moderna del estilo country club, donde cada detalle refleja equilibrio y distinción.',
+      priceNew: 'S/ 60',
+      priceOld: 'S/ 75',
+      materials: ["100% Algodón Pima Gamuzado", "Bordado de alta precisión", "Cuello resort estructurado", "Fit Oversized", "Acabados reforzados"]
+    }
+  };
+
+  let currentProduct = 'navy';
+  let currentSlide = 0;
+
+  function renderThumbs(){
+    const thumbsEl = document.getElementById('lightboxThumbs');
+    const imgs = products[currentProduct].images;
+    thumbsEl.innerHTML = '';
+    if(imgs.length <= 1){ return; }
+    imgs.forEach((src, i) => {
+      const t = document.createElement('img');
+      t.src = src;
+      t.className = 'lightbox-thumb' + (i === currentSlide ? ' active' : '');
+      t.onclick = (e) => { e.stopPropagation(); currentSlide = i; renderMain(); };
+      thumbsEl.appendChild(t);
+    });
+  }
+
+  function renderMain(){
+    const p = products[currentProduct];
+    document.getElementById('lightboxImg').src = p.images[currentSlide];
+    document.getElementById('lightboxImg').alt = p.alt;
+    updateCounter();
+    renderThumbs();
+  }
+
+  function renderProductInfo(){
+    const p = products[currentProduct];
+    document.getElementById('lightboxStoryText').textContent = p.story;
+    document.getElementById('lightboxBuyName').innerHTML = p.name;
+    const priceRow = document.querySelector('.lightbox-buy-price');
+    priceRow.innerHTML = '<span class="price-new">' + p.priceNew + '</span><span class="price-old">' + p.priceOld + '</span>';
+    const materialsEl = document.getElementById('lightboxMaterials');
+    materialsEl.innerHTML = p.materials.map(m => '<li>' + m + '</li>').join('');
+  }
+
+  function openGallery(productId, startIndex){
+    currentProduct = productId;
+    currentSlide = startIndex || 0;
+    renderProductInfo();
+    renderMain();
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeGallery(){
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function changeSlide(dir){
+    const len = products[currentProduct].images.length;
+    currentSlide = (currentSlide + dir + len) % len;
+    renderMain();
+  }
+
+  function updateCounter(){
+    const len = products[currentProduct].images.length;
+    document.getElementById('lightboxCounter').textContent = (currentSlide+1) + ' / ' + len;
+  }
+
+  document.getElementById('lightbox').addEventListener('click', function(e){
+    if(e.target.id === 'lightbox'){ closeGallery(); }
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(!document.getElementById('lightbox').classList.contains('active')) return;
+    if(e.key === 'ArrowRight') changeSlide(1);
+    if(e.key === 'ArrowLeft') changeSlide(-1);
+    if(e.key === 'Escape') closeGallery();
+  });
+
+  let touchStartX = 0;
+  const lightboxEl = document.getElementById('lightbox');
+  lightboxEl.addEventListener('touchstart', function(e){
+    touchStartX = e.changedTouches[0].screenX;
+  }, {passive:true});
+  lightboxEl.addEventListener('touchend', function(e){
+    const touchEndX = e.changedTouches[0].screenX;
+    const diff = touchEndX - touchStartX;
+    if(Math.abs(diff) > 40){
+      if(diff < 0) changeSlide(1);
+      else changeSlide(-1);
+    }
+  }, {passive:true});
+
+  const bgAudio = document.getElementById('bgAudio');
+  const musicToggle = document.getElementById('musicToggle');
+  const iconOn = document.getElementById('musicIconOn');
+  const iconOff = document.getElementById('musicIconOff');
+
+  bgAudio.volume = 0.6;
+  iconOn.style.display = 'none';
+  iconOff.style.display = 'block';
+
+  function enterSite(){
+    document.getElementById('enterGate').classList.add('hidden');
+    musicToggle.classList.add('visible');
+    bgAudio.play();
+    iconOn.style.display = 'block';
+    iconOff.style.display = 'none';
+  }
+
+  function toggleMusic(){
+    if(bgAudio.paused){
+      bgAudio.play();
+      iconOn.style.display = 'block';
+      iconOff.style.display = 'none';
+    } else {
+      bgAudio.pause();
+      iconOn.style.display = 'none';
+      iconOff.style.display = 'block';
+    }
+  }
+</script>
+
+</body>
+</html>
