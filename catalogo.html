@@ -883,19 +883,34 @@
   gap:8px;
   margin-top:28px;
   padding:12px 30px;
-  border:1px solid var(--celeste);
+  border:1px solid var(--glass-border);
   border-radius:100px;
-  color:var(--navy);
-  background:var(--celeste);
+  color:var(--cristal);
+  background:transparent;
   font-family:'Space Grotesk', sans-serif;
   font-size:12px;
   font-weight:700;
   letter-spacing:0.1em;
   text-transform:uppercase;
   text-decoration:none;
-  transition:opacity 0.2s ease;
+  transition:background 0.2s ease, color 0.2s ease;
 }
-.buy-now-btn:hover{ opacity:0.85; }
+.buy-now-btn:hover{
+  background:var(--celeste);
+  color:var(--navy);
+}
+.buy-now-btn svg{
+  transition:transform 0.2s ease;
+}
+.buy-now-btn.cart-fill svg{
+  animation: cartFillBounce 0.5s ease;
+}
+@keyframes cartFillBounce{
+  0%{ transform:scale(1); }
+  30%{ transform:scale(1.3) rotate(-8deg); }
+  60%{ transform:scale(0.9) rotate(4deg); }
+  100%{ transform:scale(1) rotate(0); }
+}
 </style>
 </head>
 <body>
@@ -975,10 +990,10 @@
 
 <div class="hero" id="hero-drop1" style="background-image:linear-gradient(rgba(0,0,0,0.25),rgba(0,0,0,0.25));">
   <div class="eyebrow">Drop I — Edición limitada</div>
-  <h1>Diamond<br><em>Swing</em></h1>
+  <h1>Diamond <em>Swing</em></h1>
   <p>Donde la precisión se convierte en brillo, y cada golpe se juega con clase</p>
   <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_3.webp" alt="Firma Témporal" class="signature-img">
-  <a href="https://wa.link/yn4dq2" target="_blank" class="buy-now-btn">
+ <a href="https://wa.link/yn4dq2" target="_blank" class="buy-now-btn" onclick="this.classList.add('cart-fill'); setTimeout(()=>this.classList.remove('cart-fill'), 500);">
   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
   Buy Now
 </a>
