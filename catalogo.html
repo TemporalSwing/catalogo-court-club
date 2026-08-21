@@ -438,14 +438,39 @@
     opacity:0.55;
     margin-bottom:14px;
   }
-  .enter-title{
+  .enter-title-wrap{
+    position:relative;
+    width:min(600px, 90vw);
+    height:90px;
+    margin:0 auto 34px;
+  }
+  .enter-title-text{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
     font-family:'Bodoni Moda', serif;
     font-style:normal;
     font-weight:500;
     font-size:64px;
     letter-spacing:0.05em;
     color:var(--cristal);
-    margin-bottom:34px;
+    animation: enterTextSwap 2s ease-in-out infinite;
+  }
+  .enter-title-signature{
+    position:absolute; inset:0;
+    margin:auto;
+    width:220px;
+    height:auto;
+    animation: enterSigSwap 2s ease-in-out infinite;
+  }
+  @keyframes enterTextSwap{
+    0%, 42% { opacity:1; }
+    50%, 92% { opacity:0; }
+    100% { opacity:1; }
+  }
+  @keyframes enterSigSwap{
+    0%, 42% { opacity:0; }
+    50%, 92% { opacity:1; }
+    100% { opacity:0; }
   }
   .enter-btn{
     -webkit-appearance:none;
@@ -851,7 +876,10 @@
 
 <div id="enterGate" class="enter-gate">
   <div class="enter-content">
-  <div class="enter-title">TÉMPORAL</div>
+  <div class="enter-title-wrap">
+  <div class="enter-title-text">TÉMPORAL</div>
+  <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_4.webp" alt="Firma Témporal" class="enter-title-signature">
+</div>
 <button id="enterBtn" class="enter-btn" onclick="enterSite()">Enter</button>
     
   </div>
