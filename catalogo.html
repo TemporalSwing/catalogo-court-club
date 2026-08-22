@@ -430,13 +430,19 @@
     transition:opacity 0.8s ease;
     overflow:hidden;
   }
-  .enter-gate-bg{
+.enter-gate-bg{
     position:absolute;
     inset:0;
     width:100%;
     height:100%;
     object-fit:cover;
+    object-position: 75% center;
     z-index:0;
+  }
+  @media (max-width:600px){
+    .enter-gate-bg{
+      object-position: 80% center;
+    }
   }
   .enter-gate.hidden{
     opacity:0;
@@ -956,7 +962,7 @@
 </head>
 <body>
 
-<div id="enterGate" class="enter-gate"><img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/fondo-drop2.webp" alt="fondo" class="enter-gate-bg" onerror="this.style.background='red'">
+<div id="enterGate" class="enter-gate"><img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/fondo-drop2.webp" alt="fondo" class="enter-gate-bg" id="enterGateBg">
   <div class="enter-content">
   <div class="enter-title-wrap">
   <div class="enter-title-text">TÉMPORAL</div>
