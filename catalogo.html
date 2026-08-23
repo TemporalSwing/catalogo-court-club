@@ -1242,7 +1242,6 @@
         <span class="price-new">S/ 60</span>
         <span class="price-old">S/ 75</span>
       </div>
-  <ul class="materials-list lightbox-materials" id="lightboxMaterials"></ul>
 
 <div class="size-selector-block">
   <span class="block-label">Talla</span>
@@ -1253,7 +1252,7 @@
   </div>
 </div>
 
-<div class="checkout-block" id="checkoutBlock">
+<div class="checkout-block visible" id="checkoutBlock">
   <span class="block-label">Método de pago</span>
   <div class="payment-options" id="paymentOptions">
     <div class="payment-pill" data-method="yape">Yape</div>
@@ -1336,8 +1335,7 @@
     document.getElementById('lightboxBuyName').innerHTML = p.name;
     const priceRow = document.querySelector('.lightbox-buy-price');
     priceRow.innerHTML = '<span class="price-new">' + p.priceNew + '</span><span class="price-old">' + p.priceOld + '</span>';
-    const materialsEl = document.getElementById('lightboxMaterials');
-    materialsEl.innerHTML = p.materials.map(m => '<li>' + m + '</li>').join('');
+ 
   }
 
   function openGallery(productId, startIndex){
@@ -1429,7 +1427,7 @@
       iconOn.style.display = 'none';
       iconOff.style.display = 'block';
     }
-  }let selectedSize = null;
+  let selectedSize = null;
 let selectedPayment = null;
 
 function resetCheckout(){
@@ -1437,7 +1435,7 @@ function resetCheckout(){
   selectedPayment = null;
   document.querySelectorAll('.size-pill').forEach(b => b.classList.remove('selected'));
   document.querySelectorAll('.payment-pill').forEach(p => p.classList.remove('selected'));
-  document.getElementById('checkoutBlock').classList.remove('visible');
+
   document.getElementById('checkoutEmail').value = '';
   document.getElementById('checkoutAddress').value = '';
   document.getElementById('checkoutPhone').value = '';
