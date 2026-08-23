@@ -1242,8 +1242,31 @@
         <span class="price-new">S/ 60</span>
         <span class="price-old">S/ 75</span>
       </div>
-      <ul class="materials-list lightbox-materials" id="lightboxMaterials"></ul>
-      <a class="cta lightbox-cta" href="#">Consultar disponibilidad</a>
+  <ul class="materials-list lightbox-materials" id="lightboxMaterials"></ul>
+
+<div class="size-selector-block">
+  <span class="block-label">Talla</span>
+  <div class="sizes" id="sizeSelector">
+    <button type="button" class="size-pill" data-size="S">S</button>
+    <button type="button" class="size-pill" data-size="M">M</button>
+    <button type="button" class="size-pill" data-size="L">L</button>
+  </div>
+</div>
+
+<div class="checkout-block" id="checkoutBlock">
+  <span class="block-label">Método de pago</span>
+  <div class="payment-options" id="paymentOptions">
+    <div class="payment-pill" data-method="yape">Yape</div>
+    <div class="payment-pill" data-method="bcp">Transferencia BCP</div>
+  </div>
+  <div class="checkout-fields">
+    <span class="block-label" style="margin-top:6px;">Tus datos</span>
+    <input type="email" id="checkoutEmail" placeholder="Correo electrónico">
+    <input type="text" id="checkoutAddress" placeholder="Dirección de envío">
+    <input type="tel" id="checkoutPhone" placeholder="Número celular">
+  </div>
+  <button type="button" class="pay-btn" id="payBtn" style="margin-top:20px;">Pagar</button>
+</div>
     </div>
 
   </div>
