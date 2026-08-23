@@ -1345,6 +1345,7 @@
     currentSlide = startIndex || 0;
     renderProductInfo();
     renderMain();
+    resetCheckout();
     document.getElementById('lightbox').classList.add('active');
     document.body.style.overflow = 'hidden';
   }
@@ -1428,7 +1429,56 @@
       iconOn.style.display = 'none';
       iconOff.style.display = 'block';
     }
-  }
+  }let selectedSize = null;
+let selectedPayment = null;
+
+function resetCheckout(){
+  selectedSize = null;
+  selectedPayment = null;
+  document.querySelectorAll('.size-pill').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.payment-pill').forEach(p => p.classList.remove('selected'));
+  document.getElementById('checkoutBlock').classList.remove('visible');
+  document.getElementById('checkoutEmail').value = '';
+  document.getElementById('checkoutAddress').value = '';
+  document.getElementById('checkoutPhone').value = '';
+  updatePayButton();
+}
+
+document.getElementById('sizeSelector').addEventListener('click', function(e){
+  const btn = e.target.closest('.size-pill');
+  if(!btn) return;
+  document.querySelectorAll('.size-pill').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedSize = btn.dataset.size;
+  document.getElementById('checkoutBlock').classList.add('visible');
+  updatePayButton();
+});
+
+document.getElementById('paymentOptions').addEventListener('click', function(e){
+  const pill = e.target.closest('.payment-pill');
+  if(!pill) return;
+  document.querySelectorAll('.payment-pill').forEach(p => p.classList.remove('selected'));
+  pill.classList.add('selected');
+  selectedPayment = pill.dataset.method;
+  updatePayButton();
+});
+
+['checkoutEmail','checkoutAddress','checkoutPhone'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updatePayButton);
+});
+
+function updatePayButton(){
+  const email = document.getElementById('checkoutEmail').value.trim();
+  const address = document.getElementById('checkoutAddress').value.trim();
+  const phone = document.getElementById('checkoutPhone').value.trim();
+  const payBtn = document.getElementById('payBtn');
+  const ready = selectedSize && selectedPayment && email && address && phone;
+  payBtn.classList.toggle('ready', !!ready);
+}
+
+document.getElementById('payBtn').addEventListener('click', function(){
+  if(!this.classList.contains('ready')) return;
+});
 function playClickSound(){
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
   const now = ctx.currentTime;
