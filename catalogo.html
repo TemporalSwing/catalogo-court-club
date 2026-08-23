@@ -720,8 +720,90 @@
   .lightbox-cta{
     display:inline-block;
     width:100%;
-    text-align:center;
+    text-align:center;  }
+  .size-selector-block{
+    margin-bottom:22px;
   }
+  .size-pill{
+    cursor:pointer;
+    background:transparent;
+    transition:background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .size-pill.selected{
+    background:var(--celeste);
+    border-color:var(--celeste);
+    color:var(--navy);
+    font-weight:700;
+  }
+  .checkout-block{
+    display:none;
+    border-top:1px solid var(--glass-border);
+    padding-top:18px;
+    margin-bottom:20px;
+  }
+  .checkout-block.visible{
+    display:block;
+  }
+  .payment-options{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+  }
+  .payment-pill{
+    flex:1;
+    border:1px solid var(--glass-border);
+    border-radius:10px;
+    padding:10px;
+    text-align:center;
+    font-size:12px;
+    cursor:pointer;
+    transition:background 0.2s ease, border-color 0.2s ease;
+  }
+  .payment-pill.selected{
+    border-color:var(--celeste);
+    background:rgba(159,216,232,0.12);
+  }
+  .checkout-fields{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:16px;
+  }
+  .checkout-fields input{
+    background:rgba(255,255,255,0.05);
+    border:1px solid var(--glass-border);
+    border-radius:8px;
+    padding:10px 12px;
+    font-size:13px;
+    color:var(--cristal);
+    font-family:'Space Grotesk', sans-serif;
+  }
+  .checkout-fields input::placeholder{
+    color:var(--cristal);
+    opacity:0.4;
+  }
+  .pay-btn{
+    width:100%;
+    padding:13px;
+    border-radius:100px;
+    border:1px solid var(--glass-border);
+    background:rgba(255,255,255,0.08);
+    color:var(--cristal);
+    opacity:0.4;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:0.04em;
+    font-family:'Space Grotesk', sans-serif;
+    cursor:not-allowed;
+    transition:opacity 0.2s ease, background 0.2s ease, color 0.2s ease, cursor 0.2s ease;
+  }
+  .pay-btn.ready{
+    opacity:1;
+    background:var(--celeste);
+    color:var(--navy);
+    cursor:pointer;
+  }
+  
   @media (max-width:980px){
     .lightbox-layout{
       grid-template-columns:1fr;
