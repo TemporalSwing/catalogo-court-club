@@ -269,6 +269,44 @@
     text-transform:uppercase;
     opacity:0.5;
   }
+  .manifesto-section{
+    background:#060708;
+    padding:calc(70px + env(safe-area-inset-top)) 24px 80px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .manifesto-inner{
+    max-width:740px;
+    margin:0 auto;
+  }
+  .manifesto-kicker{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:11px;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    text-align:center;
+    opacity:0.55;
+    margin-bottom:20px;
+  }
+  .manifesto-divider{
+    width:42px;
+    height:1px;
+    background:var(--glass-border);
+    margin:0 auto 36px;
+  }
+  .manifesto-text{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:400;
+    font-size:16px;
+    line-height:1.9;
+    opacity:0.85;
+    text-align:left;
+  }
+  @media (max-width:600px){
+    .manifesto-text{ font-size:14.5px; }
+  }
   .grid{
     display:grid;
     grid-template-columns:1fr 1fr;
