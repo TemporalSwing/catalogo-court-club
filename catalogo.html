@@ -1483,18 +1483,18 @@
 </div>
 
 <div class="checkout-block visible" id="checkoutBlock">
-  <span class="block-label">Método de pago</span>
+  <div class="checkout-fields">
+    <span class="block-label">Tus datos</span>
+    <input type="email" id="checkoutEmail" placeholder="Correo electrónico">
+    <input type="text" id="checkoutAddress" placeholder="Dirección de envío">
+    <input type="tel" id="checkoutPhone" placeholder="Número celular">
+  </div>
+  <span class="block-label" style="margin-top:20px;">Método de pago</span>
   <div class="payment-options" id="paymentOptions">
     <div class="payment-pill" data-method="yape">Yape</div>
     <div class="payment-pill" data-method="bcp">Transferencia BCP</div>
   </div>
   <div class="payment-details" id="paymentDetails"></div>
-  <div class="checkout-fields">
-    <span class="block-label" style="margin-top:6px;">Tus datos</span>
-    <input type="email" id="checkoutEmail" placeholder="Correo electrónico">
-    <input type="text" id="checkoutAddress" placeholder="Dirección de envío">
-    <input type="tel" id="checkoutPhone" placeholder="Número celular">
-  </div>
   <button type="button" class="pay-btn" id="payBtn" style="margin-top:20px;">Pagar</button>
 </div>
     </div>
