@@ -1144,6 +1144,12 @@
 <button id="enterBtn" class="enter-btn" onclick="enterSite()">Enter</button>
   </div>
 </div>
+<div class="tagline-fixed" id="taglineFixed" style="display:none;">
+  <div class="tagline-inner">
+    <span class="tagline-text en">The Essence of Exclusivity</span>
+    <span class="tagline-text es">Esencia de lo Exclusivo</span>
+  </div>
+</div>
 <div class="social-fab-wrap">
 <a href="https://wa.link/yn4dq2" target="_blank" class="fab-btn fab-btn-cart" aria-label="Comprar" onclick="this.classList.add('cart-fill'); setTimeout(()=>this.classList.remove('cart-fill'), 500);">
   <span>Buy Now</span>
@@ -1504,6 +1510,7 @@
     bgAudio.play();
     iconOn.style.display = 'block';
     iconOff.style.display = 'none';
+    document.getElementById('taglineFixed').style.display = 'block';
   }
   
   function openDrops(e){
