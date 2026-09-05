@@ -347,6 +347,7 @@
     position:relative;
     width:100%;
     aspect-ratio: 10 / 7;
+    cursor:pointer;
   }
   .diamond-card img{
     position:absolute;
@@ -1291,20 +1292,20 @@
 
 <section class="diamonds-section">
   <div class="diamonds-grid">
-    <div class="diamond-card">
-      <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_blue.webp" alt="Diamante Azul">
+    <div class="diamond-card" onclick="openGallery('diamond_blue', 0)">
+      <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_blue.webp" alt="Hope">
     </div>
-    <div class="diamond-card">
-      <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_gold.webp" alt="Diamante Dorado">
+    <div class="diamond-card" onclick="openGallery('diamond_gold', 0)">
+      <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_gold.webp" alt="Golden Jubilee">
     </div>
-    <div class="diamond-card">
-      <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_black.webp" alt="Diamante Negro">
+    <div class="diamond-card" onclick="openGallery('diamond_black', 0)">
+      <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_black.webp" alt="Black Orlov">
     </div>
-    <div class="diamond-card">
-      <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_green.webp" alt="Diamante Verde">
+    <div class="diamond-card" onclick="openGallery('diamond_green', 0)">
+      <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_green.webp" alt="Dresden Green">
     </div>
-    <div class="diamond-card">
-      <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_red.webp" alt="Diamante Rojo">
+    <div class="diamond-card" onclick="openGallery('diamond_red', 0)">
+      <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_red.webp" alt="Moussaieff Red">
     </div>
   </div>
 </section>
@@ -1449,6 +1450,12 @@
     "https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_11.png"
   ];
 
+  const diamondBlueImages = ["https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_blue.webp"];
+  const diamondGoldImages = ["https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_gold.webp"];
+  const diamondBlackImages = ["https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_black.webp"];
+  const diamondGreenImages = ["https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_green.webp"];
+  const diamondRedImages = ["https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_red.webp"];
+
   const products = {
     navy: {
       images: navyImages,
@@ -1467,6 +1474,51 @@
       priceNew: 'S/ 60',
       priceOld: 'S/ 75',
       materials: ["100% Algodón Pima Gamuzado", "Bordado de alta precisión", "Cuello resort estructurado", "Fit Oversized", "Acabados reforzados"]
+    },
+    diamond_blue: {
+      images: diamondBlueImages,
+      name: 'Hope',
+      alt: 'Hope',
+      story: 'Nació a 150 km bajo Golconda, teñido de boro. Sobrevivió a una revolución, robado, desaparecido veinte años, y volvió con otra forma. Algunas piedras aprenden a sobrevivir cambiando de identidad.',
+      priceNew: 'S/ 159',
+      priceOld: 'S/ 200',
+      materials: []
+    },
+    diamond_gold: {
+      images: diamondGoldImages,
+      name: 'Golden Jubilee',
+      alt: 'Golden Jubilee',
+      story: 'Sudáfrica, 1985. Nadie quería tallar un diamante tan agrietado. Alguien se atrevió, y en 1990 salió el más grande jamás cortado. Lo que se descarta por imperfecto a veces termina coronando reyes.',
+      priceNew: 'S/ 159',
+      priceOld: 'S/ 200',
+      materials: []
+    },
+    diamond_black: {
+      images: diamondBlackImages,
+      name: 'Black Orlov',
+      alt: 'Black Orlov',
+      story: 'El único sin origen probado. Grafito absorbiendo toda la luz, siglos de leyenda de maldición encima. Lo que no se puede comprobar, igual se vuelve historia.',
+      priceNew: 'S/ 159',
+      priceOld: 'S/ 200',
+      materials: []
+    },
+    diamond_green: {
+      images: diamondGreenImages,
+      name: 'Dresden Green',
+      alt: 'Dresden Green',
+      story: 'No nació verde. La tierra tardó millones de años en dárselo, radiación pura atravesando el cristal entero. Lo que el tiempo toca, lo cambia para siempre.',
+      priceNew: 'S/ 159',
+      priceOld: 'S/ 200',
+      materials: []
+    },
+    diamond_red: {
+      images: diamondRedImages,
+      name: 'Moussaieff Red',
+      alt: 'Moussaieff Red',
+      story: 'Brasil, 1990. Ni un elemento lo tiñó: fue la presión, doblando su estructura mientras subía a la luz. Menos de 30 existen así en el mundo. Lo raro nunca se repite.',
+      priceNew: 'S/ 159',
+      priceOld: 'S/ 200',
+      materials: []
     }
   };
 
