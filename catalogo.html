@@ -335,8 +335,8 @@
     flex:0 1 calc(33.333% - 14px);
   }
   @media (max-width:600px){
-    .diamonds-grid{ gap:14px; }
-    .diamond-card{ flex:0 1 calc(50% - 7px); }
+    .diamonds-grid{ gap:16px; }
+    .diamond-card{ flex:0 1 100%; aspect-ratio: 16 / 10; }
   }
   .diamond-card{
     background:var(--glass-fill);
@@ -798,6 +798,12 @@
     border-radius:4px;
     box-shadow:0 20px 60px rgba(0,0,0,0.6);
   }
+  @media (max-width:720px){
+    .lightbox-img{
+      max-width:88vw;
+      max-height:48vh;
+    }
+  }
   .lightbox-thumbs{
     display:flex;
     gap:10px;
@@ -987,6 +993,10 @@
     line-height:1;
     padding:10px;
     margin:-10px;
+    z-index:5;
+  }
+  @media (max-width:720px){
+    .lightbox-close{ position:fixed; background:rgba(3,4,5,0.6); border-radius:50%; width:38px; height:38px; display:flex; align-items:center; justify-content:center; padding:0; margin:0; }
   }
   .lightbox-close:hover{ opacity:1; }
   .lightbox-counter{
@@ -997,6 +1007,10 @@
     letter-spacing:0.14em;
     color:var(--cristal);
     opacity:0.6;
+    z-index:5;
+  }
+  @media (max-width:720px){
+    .lightbox-counter{ position:fixed; background:rgba(3,4,5,0.6); padding:6px 12px; border-radius:100px; }
   }
   .lightbox-arrow{
     font-size:36px;
