@@ -892,6 +892,29 @@
     border-color:var(--celeste);
     background:rgba(159,216,232,0.12);
   }
+  .payment-details{
+    display:none;
+    margin-top:14px;
+    padding:14px;
+    border:1px solid var(--glass-border);
+    border-radius:10px;
+    background:rgba(255,255,255,0.04);
+    font-size:12.5px;
+    line-height:1.8;
+  }
+  .payment-details.visible{ display:block; }
+  .payment-details strong{ color:var(--celeste); }
+  .payment-details .copy-hint{
+    display:inline-block;
+    margin-top:6px;
+    font-size:10px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    opacity:0.55;
+    cursor:pointer;
+    border-bottom:1px dotted currentColor;
+  }
+  .payment-details .copy-hint:hover{ opacity:1; }
   .checkout-fields{
     display:flex;
     flex-direction:column;
@@ -1465,6 +1488,7 @@
     <div class="payment-pill" data-method="yape">Yape</div>
     <div class="payment-pill" data-method="bcp">Transferencia BCP</div>
   </div>
+  <div class="payment-details" id="paymentDetails"></div>
   <div class="checkout-fields">
     <span class="block-label" style="margin-top:6px;">Tus datos</span>
     <input type="email" id="checkoutEmail" placeholder="Correo electrónico">
@@ -1561,6 +1585,31 @@
       materials: []
     }
   };
+
+  const paymentAccounts = {
+    yape: {
+      raw: '926675151',
+      html: 'Número Yape: <strong>926 675 151</strong><br>Titular: <strong>BRUCE H.</strong>'
+    },
+    bcp: {
+      raw: 'Cuenta Soles: 31570820688044 | CCI: 00231517082068804402',
+      html: 'Cuenta Soles BCP: <strong>3157 0820 6880 44</strong><br>CCI: <strong>0023 1517 0820 6880 4402</strong><br>Titular: <strong>BRUCE HENDERSON FALCONE</strong>'
+    }
+  };
+
+  function renderPaymentDetails(method){
+    const box = document.getElementById('paymentDetails');
+    if(!method){ box.classList.remove('visible'); box.innerHTML = ''; return; }
+    const acc = paymentAccounts[method];
+    box.innerHTML = acc.html + '<span class="copy-hint" id="copyAccountBtn">Copiar datos</span>';
+    box.classList.add('visible');
+    document.getElementById('copyAccountBtn').onclick = function(){
+      navigator.clipboard.writeText(acc.raw).then(() => {
+        this.textContent = '¡Copiado!';
+        setTimeout(() => { this.textContent = 'Copiar datos'; }, 1500);
+      });
+    };
+  }
 
   let currentProduct = 'navy';
   let currentSlide = 0;
@@ -1696,6 +1745,7 @@ function resetCheckout(){
   selectedPayment = null;
   document.querySelectorAll('.size-pill').forEach(b => b.classList.remove('selected'));
   document.querySelectorAll('.payment-pill').forEach(p => p.classList.remove('selected'));
+  renderPaymentDetails(null);
 
   document.getElementById('checkoutEmail').value = '';
   document.getElementById('checkoutAddress').value = '';
@@ -1719,6 +1769,7 @@ document.getElementById('paymentOptions').addEventListener('click', function(e){
   document.querySelectorAll('.payment-pill').forEach(p => p.classList.remove('selected'));
   pill.classList.add('selected');
   selectedPayment = pill.dataset.method;
+  renderPaymentDetails(selectedPayment);
   updatePayButton();
 });
 
@@ -1737,6 +1788,34 @@ function updatePayButton(){
 
 document.getElementById('payBtn').addEventListener('click', function(){
   if(!this.classList.contains('ready')) return;
+
+  const p = products[currentProduct];
+  const email = document.getElementById('checkoutEmail').value.trim();
+  const address = document.getElementById('checkoutAddress').value.trim();
+  const phone = document.getElementById('checkoutPhone').value.trim();
+  const methodLabel = selectedPayment === 'yape' ? 'Yape' : 'Transferencia BCP';
+
+  const orderText =
+    'Hola! Quiero confirmar mi pedido:\n' +
+    '- Producto: ' + p.alt + '\n' +
+    '- Talla: ' + selectedSize + '\n' +
+    '- Precio: ' + p.priceNew + '\n' +
+    '- Método de pago: ' + methodLabel + '\n' +
+    '- Correo: ' + email + '\n' +
+    '- Dirección de envío: ' + address + '\n' +
+    '- Celular: ' + phone + '\n' +
+    '(Adjunto mi comprobante de pago)';
+
+  function goToWhatsapp(){
+    window.open('https://wa.link/yn4dq2', '_blank');
+    alert('Copiamos tu pedido. Pégalo en el chat de WhatsApp que se acaba de abrir, junto con tu comprobante de pago.');
+  }
+
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(orderText).then(goToWhatsapp).catch(goToWhatsapp);
+  } else {
+    goToWhatsapp();
+  }
 });
 function playClickSound(){
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
