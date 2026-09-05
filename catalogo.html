@@ -1806,16 +1806,8 @@ document.getElementById('payBtn').addEventListener('click', function(){
     '- Celular: ' + phone + '\n' +
     '(Adjunto mi comprobante de pago)';
 
-  function goToWhatsapp(){
-    window.open('https://wa.link/yn4dq2', '_blank');
-    alert('Copiamos tu pedido. Pégalo en el chat de WhatsApp que se acaba de abrir, junto con tu comprobante de pago.');
-  }
-
-  if(navigator.clipboard){
-    navigator.clipboard.writeText(orderText).then(goToWhatsapp).catch(goToWhatsapp);
-  } else {
-    goToWhatsapp();
-  }
+  const whatsappUrl = 'https://wa.me/51926675151?text=' + encodeURIComponent(orderText);
+  window.open(whatsappUrl, '_blank');
 });
 function playClickSound(){
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
