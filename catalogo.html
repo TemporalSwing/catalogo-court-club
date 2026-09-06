@@ -322,22 +322,16 @@
     position:relative;
     z-index:1;
   }
-  .diamonds-grid{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    align-items:flex-start;
-    gap:20px;
-    max-width:900px;
-    margin:0 auto;
-  }
-  .diamond-card{
-    flex:0 1 calc(33.333% - 14px);
-  }
-  @media (max-width:600px){
-    .diamonds-grid{ gap:16px; }
-    .diamond-card{ flex:0 1 100%; aspect-ratio: 16 / 10; }
-  }
+.diamonds-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:28px;
+  max-width:900px;
+  margin:0 auto;
+}
+@media (max-width:720px){
+  .diamonds-grid{grid-template-columns:1fr;}
+}
   .diamond-card{
     background:var(--glass-fill);
     border:1px solid var(--glass-border);
@@ -347,7 +341,7 @@
     overflow:hidden;
     position:relative;
     width:100%;
-    aspect-ratio: 3 / 2;
+ aspect-ratio: 16 / 9;
     cursor:pointer;
   }
   .diamond-card img{
@@ -355,7 +349,7 @@
     top:0; left:0;
     width:100%; height:100%;
     object-fit:cover;
-    object-position:center 84%;
+ object-position:center;
   }
 
   .card{
