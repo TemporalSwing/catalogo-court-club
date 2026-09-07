@@ -347,19 +347,12 @@
  aspect-ratio: 16 / 9;
     cursor:pointer;
   }
-  .diamond-card img{
-    position:absolute;
-    top:0; left:0;
-    width:100%; height:100%;
-    object-fit:cover;
- object-position:center;
-  }.diamond-img-blue{ object-position:center 30%; }
-.diamond-img-gold{ object-position:center 35%; }
-.diamond-img-black{ object-position:center 40%; }
-.diamond-img-green{ object-position:center 35%; }
-.diamond-img-red{ object-position:center 45%; }
-    
-
+.diamond-card img{
+  position:absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+  object-fit:contain;
+}
   .card{
     background:var(--glass-fill);
     border:1px solid var(--glass-border);
