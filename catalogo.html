@@ -270,17 +270,30 @@
     text-transform:uppercase;
     opacity:0.5;
   }
-  .manifesto-section{
-    background:#060708;
-    padding:calc(70px + env(safe-area-inset-top)) 24px 80px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .manifesto-inner{
-    max-width:740px;
-    margin:0 auto;
-  }
+.manifesto-section{
+  position:relative;
+  background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/ChatGPT_Image_Sep_7_2026_10_42_16_PM.png');
+  background-size:cover;
+  background-position:center;
+  padding:calc(70px + env(safe-area-inset-top)) 24px 80px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.manifesto-section::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(6,7,8,0.82);
+  z-index:0;
+}
+.manifesto-inner{
+  max-width:740px;
+  margin:0 auto;
+  position:relative;
+  z-index:1;
+}
   .manifesto-kicker{
     font-family:'Space Grotesk', sans-serif;
     font-size:11px;
