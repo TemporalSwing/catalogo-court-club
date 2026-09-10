@@ -1636,10 +1636,9 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
     <div class="lightbox-buy">
       <div class="lightbox-buy-name" id="lightboxBuyName"></div>
       <div class="lightbox-buy-price">
-        <span class="price-new">S/ 60</span>
-        <span class="price-old">S/ 75</span>
+        <span class="price-new">S/ 59</span>
+        <span class="price-old">S/ 79</span>
       </div>
-
 <div class="size-selector-block">
   <span class="block-label">Talla</span>
   <div class="sizes" id="sizeSelector">
@@ -1720,8 +1719,9 @@ const diamondRedImages = [
       name: 'Midnight Navy <span class="x">×</span> Ivory Cream',
       alt: 'Midnight Navy',
       story: 'La combinación Marine Blue y Champagne Sand recupera la elegancia clásica de los clubes de tenis. Su diseño equilibra líneas limpias, detalles bordados y una silueta contemporánea para crear una pieza versátil, pensada para trascender temporadas.',
-      priceNew: 'S/ 60',
-      priceOld: 'S/ 75',
+      priceNew: 'S/ 59',
+      priceOld: 'S/ 79',
+      priceCaption: 'Precio preventa',
       materials: ["100% Algodón Pima Gamuzado", "Bordado de alta precisión", "Cuello resort estructurado", "Fit Oversized", "Acabados reforzados"]
     },
     olive: {
@@ -1729,8 +1729,9 @@ const diamondRedImages = [
       name: 'Sand Ivory <span class="x">×</span> Olive Grove',
       alt: 'Sand Ivory',
       story: 'La unión de Sand Ivory y Heritage Olive aporta una estética sobria y atemporal. Sus contrastes sutiles y bordados cuidadosamente elaborados convierten esta pieza en una reinterpretación moderna del estilo country club, donde cada detalle refleja equilibrio y distinción.',
-      priceNew: 'S/ 60',
-      priceOld: 'S/ 75',
+      priceNew: 'S/ 59',
+      priceOld: 'S/ 79',
+      priceCaption: 'Precio preventa',
       materials: ["100% Algodón Pima Gamuzado", "Bordado de alta precisión", "Cuello resort estructurado", "Fit Oversized", "Acabados reforzados"]
     },
     diamond_blue: {
@@ -1835,8 +1836,8 @@ const diamondRedImages = [
     document.getElementById('lightboxStoryText').textContent = p.story;
     document.getElementById('lightboxBuyName').innerHTML = p.name;
     const priceRow = document.querySelector('.lightbox-buy-price');
-    priceRow.innerHTML = '<span class="price-new">' + p.priceNew + '</span><span class="price-old">' + p.priceOld + '</span>';
- 
+    const captionHtml = p.priceCaption ? '<div class="price-caption">' + p.priceCaption + '</div>' : '';
+    priceRow.innerHTML = '<span class="price-new">' + p.priceNew + '</span><span class="price-old">' + p.priceOld + '</span>' + captionHtml;
   }
 
   function openGallery(productId, startIndex){
