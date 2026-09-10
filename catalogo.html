@@ -32,6 +32,14 @@
     -webkit-tap-highlight-color:transparent;
     touch-action:manipulation;
   }
+      .fixed-bg{
+    position: fixed;
+    inset: 0;
+    background-image: url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg');
+    background-size: cover;
+    background-position: center top;
+    z-index: -1;
+  }
   .wrap{max-width:1100px; margin:0 auto; padding:0 24px;}
 
   header{
@@ -1299,7 +1307,7 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
 </style>
 </head>
 <body>
-
+<div class="fixed-bg"></div>
 <div id="enterGate" class="enter-gate"><img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/fondo-drop2.webp" alt="fondo" class="enter-gate-bg" id="enterGateBg">
   <div class="enter-content">
   <div class="enter-title-wrap">
