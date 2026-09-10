@@ -904,6 +904,19 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
     font-size:12px;
     letter-spacing:1px;
   }
+  .reviews-toggle{
+    display:none;
+    font-size:11px;
+    letter-spacing:0.05em;
+    color:#C9A063;
+    text-decoration:underline;
+    cursor:pointer;
+    opacity:0.9;
+    margin-bottom:14px;
+  }
+  .lightbox-reviews.collapsed{
+    display:none !important;
+  }
   .lightbox-reviews{
     margin-top:22px;
     width:100%;
@@ -1720,6 +1733,7 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
         <span class="stars" id="ratingStars"></span>
         <span id="ratingText"></span>
       </div>
+      <span class="reviews-toggle" id="reviewsToggle" onclick="toggleReviews()">Ver reseñas ›</span>
         <div class="lightbox-buy-price">
         <span class="price-new">S/ 59</span>
         <span class="price-old">S/ 79</span>
@@ -1733,7 +1747,7 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
   </div>
 </div>
 
-<div class="lightbox-reviews" id="lightboxReviews" style="display:none;">
+<div class="lightbox-reviews collapsed" id="lightboxReviews" style="display:none;">
   <span class="reviews-label">Reseñas</span>
   <div id="reviewsList"></div>
   <div class="reviews-cta">¿Ya compraste? Envíanos tu reseña por <a href="https://wa.link/yn4dq2" target="_blank">WhatsApp</a> y recibe 10% de descuento en tu próxima compra.</div>
@@ -1914,17 +1928,35 @@ const diamondRedImages = [
     }
   };
 
+  function toggleReviews(){
+    const box = document.getElementById('lightboxReviews');
+    const toggle = document.getElementById('reviewsToggle');
+    const isOpen = !box.classList.contains('collapsed');
+    if(isOpen){
+      box.classList.add('collapsed');
+      toggle.textContent = 'Ver reseñas ›';
+    } else {
+      box.classList.remove('collapsed');
+      toggle.textContent = 'Ocultar reseñas ‹';
+    }
+  }
+
   function renderReviews(productKey){
     const box = document.getElementById('lightboxReviews');
     const list = document.getElementById('reviewsList');
     const badge = document.getElementById('ratingBadge');
+    const toggle = document.getElementById('reviewsToggle');
     const data = reviews[productKey];
+    box.classList.add('collapsed');
+    toggle.textContent = 'Ver reseñas ›';
     if(!data || !data.length){
       box.style.display='none'; list.innerHTML='';
       badge.style.display='none';
+      toggle.style.display='none';
       return;
     }
     box.style.display='flex';
+    toggle.style.display='inline';
     list.innerHTML = data.map(r => `
       <div class="review-item">
         <div class="review-avatar">${r.name.charAt(0)}</div>
