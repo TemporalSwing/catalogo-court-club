@@ -918,6 +918,18 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
     display:none !important;
   }
   .lightbox-reviews{
+    max-height:220px;
+    overflow-y:auto;
+    padding-right:6px;
+  }
+  .lightbox-reviews::-webkit-scrollbar{
+    width:4px;
+  }
+  .lightbox-reviews::-webkit-scrollbar-thumb{
+    background:rgba(255,255,255,0.2);
+    border-radius:10px;
+  }
+  .lightbox-reviews{
     margin-top:22px;
     width:100%;
     max-width:400px;
