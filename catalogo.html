@@ -32,13 +32,18 @@
     -webkit-tap-highlight-color:transparent;
     touch-action:manipulation;
   }
-      .fixed-bg{
-    position: fixed;
-    inset: 0;
-    background-image: url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg');
-    background-size: cover;
-    background-position: center top;
-    z-index: -1;
+  .strip-bg{
+    position:relative;
+    background-repeat:no-repeat;
+    background-color:#060708;
+  }
+  .strip-bg::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg, rgba(6,7,8,0.55) 0%, rgba(6,7,8,0.30) 40%, rgba(6,7,8,0.70) 100%);
+    z-index:0;
+    pointer-events:none;
   }
   .wrap{max-width:1100px; margin:0 auto; padding:0 24px;}
 
@@ -1304,10 +1309,16 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
   60%{ transform:scale(0.9) rotate(4deg); }
   100%{ transform:scale(1) rotate(0); }
 }
+     .strip-bg-1{ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg'); background-size:100% 565.87%; background-position:center 0%; }
+  .strip-bg-2{ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg'); background-size:100% 1006.52%; background-position:center 19.62%; }
+  .strip-bg-3{ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg'); background-size:100% 565.87%; background-position:center 33.53%; }
+  .strip-bg-4{ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg'); background-size:100% 706.77%; background-position:center 52.74%; }
+  .strip-bg-5{ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg'); background-size:100% 436.68%; background-position:center 77.08%; }
+  .strip-bg-6{ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg'); background-size:100% 565.87%; background-position:center 100%; } 
 </style>
 </head>
 <body>
-<div class="fixed-bg"></div>
+
 <div id="enterGate" class="enter-gate"><img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/fondo-drop2.webp" alt="fondo" class="enter-gate-bg" id="enterGateBg">
   <div class="enter-content">
   <div class="enter-title-wrap">
@@ -1442,7 +1453,7 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
 
 <div class="drops-bg-wrapper" style="background-image:url('https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_14_fondo_drops.webp');">
 
-<div class="hero" id="hero-drop1" style="background-image:linear-gradient(rgba(0,0,0,0.25),rgba(0,0,0,0.25));">
+<div class="hero strip-bg strip-bg-1" id="hero-drop1">
   <div class="eyebrow">Drop I — Edición limitada</div>
   <h1>Diamond <em>Swing</em></h1>
   <p>Donde la precisión se convierte en brillo, y cada golpe se juega con clase</p>
@@ -1450,7 +1461,7 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
 
 </div>
 
-<section class="story-section" id="story-drop1">
+<section class="story-section strip-bg strip-bg-2" id="story-drop1">
   <div class="story-overlay-dark"></div>
   <div class="wrap story-grid">
     <div class="story-col">
@@ -1465,7 +1476,7 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
   </div>
 </section>
 
-<section class="diamonds-section">
+<section class="diamonds-section strip-bg strip-bg-3">
   <div class="diamonds-grid">
     <div class="diamond-card gallery-trigger" onclick="openGallery('diamond_blue', 0)">
  <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/diamond_blue.webp" alt="Hope" class="diamond-img-blue">
@@ -1525,14 +1536,14 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
   </div>
 </section>
 
-<div class="hero" id="hero-drop2" style="background-image:linear-gradient(rgba(0,0,0,0.25),rgba(0,0,0,0.25));">
+<div class="hero strip-bg strip-bg-4" id="hero-drop2">
   <div class="eyebrow">Drop II — Edición limitada</div>
   <h1>The Court<br><em>Club</em></h1>
   <p>Donde cada punto se juega con clase, y cada victoria se celebra con estilo</p>
   <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_3.webp" alt="Firma Témporal" class="signature-img">
 </div>
 
-<section class="story-section" id="story-drop2">
+<section class="story-section strip-bg strip-bg-5" id="story-drop2">
   <div class="wrap story-grid">
     <div class="story-col">
       <div class="story-kicker">The Story</div>
@@ -1553,7 +1564,7 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
   <span>The Collection ↓</span>
 </div>
 
-<section class="catalog" id="catalog">
+<section class="catalog strip-bg strip-bg-6" id="catalog">
   <div class="press-hint">(press)</div>
   <div class="wrap grid">
 
