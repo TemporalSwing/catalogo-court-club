@@ -890,6 +890,20 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
 .lightbox-materials li::before{
     content:none;
   }
+   .rating-badge{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:11px;
+    opacity:0.75;
+    margin-top:4px;
+    margin-bottom:10px;
+  }
+  .rating-badge .stars{
+    color:#C9A063;
+    font-size:12px;
+    letter-spacing:1px;
+  }
   .lightbox-reviews{
     margin-top:22px;
     width:100%;
@@ -942,6 +956,20 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
   }
   @media (max-width:980px){
     .lightbox-reviews{ margin-left:auto; margin-right:auto; }
+  }
+  .reviews-cta{
+    margin-top:14px;
+    padding:12px 14px;
+    border:1px solid var(--glass-border);
+    border-radius:10px;
+    background:var(--glass-fill);
+    font-size:11.5px;
+    line-height:1.5;
+    opacity:0.85;
+  }
+  .reviews-cta a{
+    color:#C9A063;
+    text-decoration:underline;
   }
   .lightbox-cta{
     display:inline-block;
@@ -1687,12 +1715,12 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
     </div>
 
     <div class="lightbox-buy">
-      <div class="lightbox-buy-name" id="lightboxBuyName"></div>
-      <div class="lightbox-reviews" id="lightboxReviews" style="display:none;">
-        <span class="reviews-label">Reseñas</span>
-        <div id="reviewsList"></div>
+       <div class="lightbox-buy-name" id="lightboxBuyName"></div>
+      <div class="rating-badge" id="ratingBadge" style="display:none;">
+        <span class="stars" id="ratingStars"></span>
+        <span id="ratingText"></span>
       </div>
-      <div class="lightbox-buy-price">
+        <div class="lightbox-buy-price">
         <span class="price-new">S/ 59</span>
         <span class="price-old">S/ 79</span>
       </div>
@@ -1703,6 +1731,12 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
     <button type="button" class="size-pill" data-size="M">M</button>
     <button type="button" class="size-pill" data-size="L">L</button>
   </div>
+</div>
+
+<div class="lightbox-reviews" id="lightboxReviews" style="display:none;">
+  <span class="reviews-label">Reseñas</span>
+  <div id="reviewsList"></div>
+  <div class="reviews-cta">¿Ya compraste? Envíanos tu reseña por <a href="https://wa.link/yn4dq2" target="_blank">WhatsApp</a> y recibe 10% de descuento en tu próxima compra.</div>
 </div>
 
 <div class="checkout-block visible" id="checkoutBlock">
@@ -1883,8 +1917,13 @@ const diamondRedImages = [
   function renderReviews(productKey){
     const box = document.getElementById('lightboxReviews');
     const list = document.getElementById('reviewsList');
+    const badge = document.getElementById('ratingBadge');
     const data = reviews[productKey];
-    if(!data || !data.length){ box.style.display='none'; list.innerHTML=''; return; }
+    if(!data || !data.length){
+      box.style.display='none'; list.innerHTML='';
+      badge.style.display='none';
+      return;
+    }
     box.style.display='flex';
     list.innerHTML = data.map(r => `
       <div class="review-item">
@@ -1896,6 +1935,12 @@ const diamondRedImages = [
         </div>
       </div>
     `).join('');
+
+    const avg = data.reduce((sum, r) => sum + r.stars, 0) / data.length;
+    const rounded = Math.round(avg);
+    document.getElementById('ratingStars').textContent = '★'.repeat(rounded) + '☆'.repeat(5-rounded);
+    document.getElementById('ratingText').textContent = avg.toFixed(1) + ' (' + data.length + ' reseñas)';
+    badge.style.display='flex';
   }
 
   function renderPaymentDetails(method){
