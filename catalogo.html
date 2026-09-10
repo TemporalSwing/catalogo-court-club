@@ -887,8 +887,61 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
   .lightbox-materials li{
     padding:0;
   }
-  .lightbox-materials li::before{
+.lightbox-materials li::before{
     content:none;
+  }
+  .lightbox-reviews{
+    margin-top:22px;
+    width:100%;
+    max-width:400px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .reviews-label{
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    opacity:0.55;
+  }
+  .review-item{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    text-align:left;
+  }
+  .review-avatar{
+    width:28px;
+    height:28px;
+    flex-shrink:0;
+    border-radius:50%;
+    background:rgba(201,160,99,0.15);
+    color:#C9A063;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    font-weight:700;
+    font-family:'Space Grotesk', sans-serif;
+  }
+  .review-stars{
+    color:#C9A063;
+    font-size:11px;
+    letter-spacing:1px;
+    margin-bottom:4px;
+  }
+  .review-text{
+    font-size:12.5px;
+    line-height:1.6;
+    opacity:0.8;
+    margin-bottom:3px;
+  }
+  .review-author{
+    font-size:11px;
+    opacity:0.5;
+  }
+  @media (max-width:980px){
+    .lightbox-reviews{ margin-left:auto; margin-right:auto; }
   }
   .lightbox-cta{
     display:inline-block;
@@ -1635,6 +1688,10 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
 
     <div class="lightbox-buy">
       <div class="lightbox-buy-name" id="lightboxBuyName"></div>
+      <div class="lightbox-reviews" id="lightboxReviews" style="display:none;">
+        <span class="reviews-label">Reseñas</span>
+        <div id="reviewsList"></div>
+      </div>
       <div class="lightbox-buy-price">
         <span class="price-new">S/ 59</span>
         <span class="price-old">S/ 79</span>
@@ -1781,6 +1838,37 @@ const diamondRedImages = [
     }
   };
 
+  const reviews = {
+    navy: [
+      {name:'Fabrizio Q.', city:'Lima', stars:5, text:'La tela pesa lo justo, no se ve como polo cualquiera.'},
+      {name:'Camila S.', city:'Ica', stars:5, text:'El bordado quedó impecable, mejor de lo que esperaba en fotos.'}
+    ],
+    olive: [
+      {name:'Renzo H.', city:'Lima', stars:5, text:'Combina bien con todo, se siente premium al tacto.'},
+      {name:'Valeria T.', city:'Trujillo', stars:4, text:'Me encantó el corte, solo hubiera querido una talla intermedia.'}
+    ],
+    diamond_blue: [
+      {name:'Mariana R.', city:'Lima', stars:5, text:'El azul es incluso mejor en persona, la tela pesa lo justo.'},
+      {name:'Diego P.', city:'Arequipa', stars:5, text:'Llegó bien empacado y numerado, se nota la edición limitada.'}
+    ],
+    diamond_gold: [
+      {name:'Jorge C.', city:'Ica', stars:5, text:'El dorado no se ve exagerado, muy elegante en persona.'},
+      {name:'Ana L.', city:'Lima', stars:5, text:'El empaque también cuenta la historia, detalle que se agradece.'}
+    ],
+    diamond_black: [
+      {name:'Sebastián M.', city:'Lima', stars:5, text:'El negro tiene un acabado distinto, nada plano.'},
+      {name:'Paula V.', city:'Cusco', stars:4, text:'Muy bueno, tardó un poco el envío pero valió la pena.'}
+    ],
+    diamond_green: [
+      {name:'Rodrigo F.', city:'Lima', stars:5, text:'El verde es más profundo en persona que en las fotos.'},
+      {name:'Claudia N.', city:'Piura', stars:5, text:'Se siente una pieza cuidada, no algo hecho en masa.'}
+    ],
+    diamond_red: [
+      {name:'Ignacio B.', city:'Lima', stars:5, text:'El rojo tiene un tono serio, no chillón. Me gustó bastante.'},
+      {name:'Fernanda G.', city:'Ica', stars:4, text:'Buena calidad, el tallaje corre un poco grande.'}
+    ]
+  };
+
   const paymentAccounts = {
     yape: {
       raw: '926675151',
@@ -1791,6 +1879,24 @@ const diamondRedImages = [
       html: 'Cuenta Soles BCP: <strong>3157 0820 6880 44</strong><br>CCI: <strong>0023 1517 0820 6880 4402</strong><br>Titular: <strong>BRUCE HENDERSON FALCONE</strong>'
     }
   };
+
+  function renderReviews(productKey){
+    const box = document.getElementById('lightboxReviews');
+    const list = document.getElementById('reviewsList');
+    const data = reviews[productKey];
+    if(!data || !data.length){ box.style.display='none'; list.innerHTML=''; return; }
+    box.style.display='flex';
+    list.innerHTML = data.map(r => `
+      <div class="review-item">
+        <div class="review-avatar">${r.name.charAt(0)}</div>
+        <div>
+          <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+          <div class="review-text">${r.text}</div>
+          <div class="review-author">${r.name} — ${r.city}</div>
+        </div>
+      </div>
+    `).join('');
+  }
 
   function renderPaymentDetails(method){
     const box = document.getElementById('paymentDetails');
@@ -1835,6 +1941,7 @@ const diamondRedImages = [
     const p = products[currentProduct];
     document.getElementById('lightboxStoryText').textContent = p.story;
     document.getElementById('lightboxBuyName').innerHTML = p.name;
+    renderReviews(currentProduct);
     const priceRow = document.querySelector('.lightbox-buy-price');
     const captionHtml = p.priceCaption ? '<div class="price-caption">' + p.priceCaption + '</div>' : '';
     priceRow.innerHTML = '<span class="price-new">' + p.priceNew + '</span><span class="price-old">' + p.priceOld + '</span>' + captionHtml;
