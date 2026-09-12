@@ -103,18 +103,16 @@
   nav a{
     color:var(--cristal);
     text-decoration:none;
+    font-family:'Space Grotesk', sans-serif;
     font-size:12px;
-    letter-spacing:0.14em;
+    font-weight:700;
+    letter-spacing:0.08em;
     text-transform:uppercase;
-    opacity:0.65;
+    opacity:0.85;
     margin-left:22px;
   }
   nav{
     margin-right:10px;
-  }
-  #navOrigen{
-    font-size:15px;
-    opacity:0.9;
   }
 
   .hero{
@@ -2121,11 +2119,13 @@ const diamondRedImages = [
     resetCheckout();
     document.getElementById('lightbox').classList.add('active');
     document.body.style.overflow = 'hidden';
+    document.querySelector('header').style.display = 'none';
   }
 
   function closeGallery(){
     document.getElementById('lightbox').classList.remove('active');
     document.body.style.overflow = '';
+    document.querySelector('header').style.display = 'flex';
   }
 
   function changeSlide(dir){
