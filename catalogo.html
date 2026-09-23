@@ -1484,7 +1484,109 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
   60%{ transform:scale(0.9) rotate(4deg); }
   100%{ transform:scale(1) rotate(0); }
 }
-     .strip-bg-1{ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg'); background-size:100% 565.87%; background-position:center 0%; }
+  .code-modal{
+    position:fixed;
+    inset:0;
+    z-index:2100;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:rgba(3,4,5,0.9);
+    padding:24px;
+  }
+  .code-modal.active{ display:flex; }
+  .code-modal-box{
+    width:100%;
+    max-width:360px;
+    background:rgba(15,17,19,0.92);
+    border:1px solid var(--glass-border);
+    border-radius:16px;
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    padding:32px 26px;
+    text-align:center;
+    position:relative;
+  }
+  .code-modal-close{
+    position:absolute;
+    top:14px;
+    right:16px;
+    font-size:22px;
+    opacity:0.6;
+    cursor:pointer;
+    line-height:1;
+  }
+  .code-modal-close:hover{ opacity:1; }
+  .code-modal-kicker{
+    font-size:10px;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    opacity:0.55;
+    margin-bottom:10px;
+  }
+  .code-modal-title{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:20px;
+    margin-bottom:20px;
+  }
+  .code-modal-input{
+    width:100%;
+    background:rgba(255,255,255,0.05);
+    border:1px solid var(--glass-border);
+    border-radius:10px;
+    padding:13px 14px;
+    font-family:'Space Grotesk', monospace;
+    font-size:16px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    text-align:center;
+    color:var(--cristal);
+  }
+  .code-modal-input::placeholder{
+    color:var(--cristal);
+    opacity:0.35;
+    letter-spacing:0.08em;
+    text-transform:none;
+  }
+  .code-modal-btn{
+    width:100%;
+    margin-top:14px;
+    padding:12px;
+    border-radius:100px;
+    border:1px solid var(--celeste);
+    background:var(--celeste);
+    color:var(--navy);
+    font-family:'Space Grotesk', sans-serif;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+  .code-modal-msg{
+    margin-top:14px;
+    font-size:12px;
+    line-height:1.5;
+    min-height:16px;
+  }
+  .code-modal-msg.ok{ color:#34D399; }
+  .code-modal-msg.err{ color:#F87171; }
+  .founder-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:10px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:#34D399;
+    background:rgba(52,211,153,0.1);
+    border:1px solid rgba(52,211,153,0.35);
+    border-radius:100px;
+    padding:5px 12px;
+    margin-bottom:10px;
+  }
+    .strip-bg-1{ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg'); background-size:100% 565.87%; background-position:center 0%; }
   .strip-bg-2{ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg'); background-size:100% 1006.52%; background-position:center 19.62%; }
   .strip-bg-3{ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg'); background-size:100% 565.87%; background-position:center 33.53%; }
   .strip-bg-4{ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg'); background-size:100% 706.77%; background-position:center 52.74%; }
@@ -1545,10 +1647,11 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
     <img src="https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_2.webp" alt="Témporal" class="logo-img">
     <div class="brand-name">TÉMPORAL</div>
   </div>
-  <nav>
-    <a href="#" id="navOrigen" onclick="closeDrops(event)" style="display:none;">Origen</a>
-    <a href="#" id="navDrops" onclick="openDrops(event)">Drops</a>
-  </nav>
+<nav>
+  <a href="#" id="navOrigen" onclick="closeDrops(event)" style="display:none;">Origen</a>
+  <a href="#" id="navDrops" onclick="openDrops(event)">Drops</a>
+  <a href="#" id="navCodigo" onclick="openCodeModal(event)">Código</a>
+</nav>
 </header>
 <section class="drops-index" id="drops-collection">
   <div class="drops-index-bgshade"></div>
@@ -1861,7 +1964,16 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
 
   </div>
 </div>
-
+<div id="codeModal" class="code-modal">
+  <div class="code-modal-box">
+    <div class="code-modal-close" onclick="closeCodeModal()">&times;</div>
+    <div class="code-modal-kicker">Founders Club</div>
+    <div class="code-modal-title">Ingresa tu código</div>
+    <input type="text" id="codeInput" class="code-modal-input" placeholder="TEM-0000" maxlength="8">
+    <button type="button" class="code-modal-btn" onclick="validateCode()">Validar código</button>
+    <div id="codeModalMsg" class="code-modal-msg"></div>
+  </div>
+</div>
 <script>
   const navyImages = [
     "https://raw.githubusercontent.com/brucehendersonfalcone/catalogo-court-club/main/imagen_7.png",
@@ -1916,6 +2028,7 @@ const diamondRedImages = [
       priceNew: 'S/ 59',
       priceOld: 'S/ 79',
       priceCaption: 'Precio preventa',
+      drop: 2,
       materials: ["100% Algodón Pima Gamuzado", "Bordado de alta precisión", "Cuello resort estructurado", "Fit Oversized", "Acabados reforzados"]
     },
     olive: {
@@ -1926,6 +2039,7 @@ const diamondRedImages = [
       priceNew: 'S/ 59',
       priceOld: 'S/ 79',
       priceCaption: 'Precio preventa',
+      drop: 2,
       materials: ["100% Algodón Pima Gamuzado", "Bordado de alta precisión", "Cuello resort estructurado", "Fit Oversized", "Acabados reforzados"]
     },
     diamond_blue: {
@@ -1935,6 +2049,7 @@ const diamondRedImages = [
       story: 'Nació a 150 km bajo Golconda, teñido de boro. Sobrevivió a una revolución, robado, desaparecido veinte años, y volvió con otra forma. Algunas piedras aprenden a sobrevivir cambiando de identidad.',
       priceNew: 'S/ 159',
       priceOld: 'S/ 200',
+      drop: 1,
       materials: []
     },
     diamond_gold: {
@@ -1943,7 +2058,8 @@ const diamondRedImages = [
       alt: 'Golden Jubilee',
       story: 'Sudáfrica, 1985. Nadie quería tallar un diamante tan agrietado. Alguien se atrevió, y en 1990 salió el más grande jamás cortado. Lo que se descarta por imperfecto a veces termina coronando reyes.',
       priceNew: 'S/ 159',
-      priceOld: 'S/ 200',
+          priceOld: 'S/ 200',
+      drop: 1,
       materials: []
     },
     diamond_black: {
@@ -1953,6 +2069,7 @@ const diamondRedImages = [
       story: 'El único sin origen probado. Grafito absorbiendo toda la luz, siglos de leyenda de maldición encima. Lo que no se puede comprobar, igual se vuelve historia.',
       priceNew: 'S/ 159',
       priceOld: 'S/ 200',
+      drop: 1,
       materials: []
     },
     diamond_green: {
@@ -1962,6 +2079,7 @@ const diamondRedImages = [
       story: 'No nació verde. La tierra tardó millones de años en dárselo, radiación pura atravesando el cristal entero. Lo que el tiempo toca, lo cambia para siempre.',
       priceNew: 'S/ 159',
       priceOld: 'S/ 200',
+         drop: 1,  
       materials: []
     },
     diamond_red: {
@@ -1971,6 +2089,7 @@ const diamondRedImages = [
       story: 'Brasil, 1990. Ni un elemento lo tiñó: fue la presión, doblando su estructura mientras subía a la luz. Menos de 30 existen así en el mundo. Lo raro nunca se repite.',
       priceNew: 'S/ 159',
       priceOld: 'S/ 200',
+           drop: 1,
       materials: []
     }
   };
@@ -2005,6 +2124,99 @@ const diamondRedImages = [
       {name:'Fernanda G.', city:'Ica', stars:4, text:'Buena calidad, el tallaje corre un poco grande.'}
     ]
   };
+
+// ============ SISTEMA DE CÓDIGOS FOUNDERS CLUB ============
+const validDNIs = ["2733","5310","7454"]; // David, Bruce, Akin
+const CODE_PREFIX = "TEM-";
+const MAX_USES = 3;
+const MAX_FOUNDER_DROP = 3;
+
+function getUsageMap(){
+  try{ return JSON.parse(localStorage.getItem('temporalCodeUsage')) || {}; }
+  catch(e){ return {}; }
+}
+function saveUsageMap(map){
+  localStorage.setItem('temporalCodeUsage', JSON.stringify(map));
+}
+function getActiveCode(){
+  return localStorage.getItem('temporalActiveCode') || null;
+}
+function setActiveCode(code){
+  localStorage.setItem('temporalActiveCode', code);
+}
+
+function openCodeModal(e){
+  if(e) e.preventDefault();
+  document.getElementById('codeModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  const active = getActiveCode();
+  const msg = document.getElementById('codeModalMsg');
+  if(active){
+    const usage = getUsageMap();
+    const used = usage[active] || 0;
+    msg.className = 'code-modal-msg ok';
+    msg.textContent = 'Código activo: ' + active + ' — usos restantes: ' + (MAX_USES - used) + '/' + MAX_USES;
+  } else {
+    msg.textContent = '';
+  }
+}
+function closeCodeModal(){
+  document.getElementById('codeModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function validateCode(){
+  const input = document.getElementById('codeInput').value.trim().toUpperCase();
+  const msg = document.getElementById('codeModalMsg');
+
+  if(!/^TEM-\d{4}$/.test(input)){
+    msg.className = 'code-modal-msg err';
+    msg.textContent = 'Formato inválido. Usa TEM-0000 (últimos 4 dígitos de tu DNI).';
+    return;
+  }
+
+  const last4 = input.replace(CODE_PREFIX, '');
+  if(!validDNIs.includes(last4)){
+    msg.className = 'code-modal-msg err';
+    msg.textContent = 'Código no reconocido. Verifica tu código Founders Club.';
+    return;
+  }
+
+  const usage = getUsageMap();
+  const used = usage[input] || 0;
+  if(used >= MAX_USES){
+    msg.className = 'code-modal-msg err';
+    msg.textContent = 'Este código ya alcanzó el límite de ' + MAX_USES + ' usos.';
+    return;
+  }
+
+  setActiveCode(input);
+  msg.className = 'code-modal-msg ok';
+  msg.textContent = '¡Código válido! Precio preventa desbloqueado — usos restantes: ' + (MAX_USES - used) + '/' + MAX_USES;
+  if(document.getElementById('lightbox').classList.contains('active')){
+    renderPriceBlock();
+  }
+}
+
+function founderPriceApplies(product){
+  const active = getActiveCode();
+  if(!active) return false;
+  if((product.drop || 1) > MAX_FOUNDER_DROP) return false;
+  const usage = getUsageMap();
+  const used = usage[active] || 0;
+  return used < MAX_USES;
+}
+
+function renderPriceBlock(){
+  const p = products[currentProduct];
+  const priceRow = document.querySelector('.lightbox-buy-price');
+  const isFounder = founderPriceApplies(p);
+  const captionText = isFounder ? 'Precio Founders Club' : (p.priceCaption || '');
+  const captionHtml = captionText ? '<div class="price-caption">' + captionText + '</div>' : '';
+  const badgeHtml = isFounder ? '<div class="founder-badge">✓ Founders Club</div>' : '';
+  priceRow.innerHTML = badgeHtml + '<div style="display:flex;align-items:baseline;gap:10px;"><span class="price-new">' + p.priceNew + '</span><span class="price-old">' + p.priceOld + '</span></div>' + captionHtml;
+}
+// ============ FIN SISTEMA FOUNDERS ============
 
   const paymentAccounts = {
     yape: {
@@ -2103,15 +2315,13 @@ const diamondRedImages = [
     renderThumbs();
   }
 
-  function renderProductInfo(){
-    const p = products[currentProduct];
-    document.getElementById('lightboxStoryText').textContent = p.story;
-    document.getElementById('lightboxBuyName').innerHTML = p.name;
-    renderReviews(currentProduct);
-    const priceRow = document.querySelector('.lightbox-buy-price');
-    const captionHtml = p.priceCaption ? '<div class="price-caption">' + p.priceCaption + '</div>' : '';
-    priceRow.innerHTML = '<span class="price-new">' + p.priceNew + '</span><span class="price-old">' + p.priceOld + '</span>' + captionHtml;
-  }
+function renderProductInfo(){
+  const p = products[currentProduct];
+  document.getElementById('lightboxStoryText').textContent = p.story;
+  document.getElementById('lightboxBuyName').innerHTML = p.name;
+  renderReviews(currentProduct);
+  renderPriceBlock();
+}
 
   function openGallery(productId, startIndex){
     currentProduct = productId;
@@ -2287,16 +2497,28 @@ document.getElementById('payBtn').addEventListener('click', function(){
   const phone = document.getElementById('checkoutPhone').value.trim();
   const methodLabel = selectedPayment === 'yape' ? 'Yape' : 'Transferencia BCP';
 
-  const orderText =
-    'Hola! Quiero confirmar mi pedido:\n' +
-    '- Producto: ' + p.alt + '\n' +
-    '- Talla: ' + selectedSize + '\n' +
-    '- Precio: ' + p.priceNew + '\n' +
-    '- Método de pago: ' + methodLabel + '\n' +
-    '- Correo: ' + email + '\n' +
-    '- Dirección de envío: ' + address + '\n' +
-    '- Celular: ' + phone + '\n' +
-    '(Adjunto mi comprobante de pago)';
+    const isFounder = founderPriceApplies(p);
+    const finalPrice = isFounder ? p.priceNew : p.priceOld;
+    const activeCode = getActiveCode();
+    let codeLine = '';
+    if(isFounder && activeCode){
+      const usage = getUsageMap();
+      usage[activeCode] = (usage[activeCode] || 0) + 1;
+      saveUsageMap(usage);
+      codeLine = '- Código Founders: ' + activeCode + ' (uso ' + usage[activeCode] + '/' + MAX_USES + ')\n';
+    }
+
+    const orderText =
+      'Hola! Quiero confirmar mi pedido:\n' +
+      '- Producto: ' + p.alt + '\n' +
+      '- Talla: ' + selectedSize + '\n' +
+      '- Precio: ' + finalPrice + (isFounder ? ' (Founders Club)' : '') + '\n' +
+      codeLine +
+      '- Método de pago: ' + methodLabel + '\n' +
+      '- Correo: ' + email + '\n' +
+      '- Dirección de envío: ' + address + '\n' +
+      '- Celular: ' + phone + '\n' +
+      '(Adjunto mi comprobante de pago)';
 
   const whatsappUrl = 'https://wa.me/51926675151?text=' + encodeURIComponent(orderText);
   window.open(whatsappUrl, '_blank');
