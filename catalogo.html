@@ -2126,7 +2126,8 @@ const diamondRedImages = [
   };
 
 // ============ SISTEMA DE CÓDIGOS FOUNDERS CLUB ============
-const validDNIs = ["2733","5310","7454"]; // David, Bruce, Akin
+const CODIGO_MADRE = "TEM-poral2702";
+const validDNIs = ["2733","5310","7454","0896","1728","8166","7122","0153","6580"];
 const CODE_PREFIX = "TEM-";
 const MAX_USES = 3;
 const MAX_FOUNDER_DROP = 3;
@@ -2151,6 +2152,7 @@ function openCodeModal(e){
   document.body.style.overflow = 'hidden';
   const active = getActiveCode();
   const msg = document.getElementById('codeModalMsg');
+
   if(active){
     const usage = getUsageMap();
     const used = usage[active] || 0;
@@ -2169,6 +2171,13 @@ function validateCode(){
   const input = document.getElementById('codeInput').value.trim().toUpperCase();
   const msg = document.getElementById('codeModalMsg');
 
+  if(input === CODIGO_MADRE){
+    setActiveCode(input);
+    msg.className = 'code-modal-msg ok';
+    msg.textContent = '¡Código válido! Precio preventa desbloqueado hasta el Drop 03.';
+    if(document.getElementById('lightbox').classList.contains('active')) renderPriceBlock();
+    return;
+  }
   if(!/^TEM-\d{4}$/.test(input)){
     msg.className = 'code-modal-msg err';
     msg.textContent = 'Formato inválido. Usa TEM-0000 (últimos 4 dígitos de tu DNI).';
