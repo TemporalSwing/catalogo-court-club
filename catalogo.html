@@ -1572,6 +1572,29 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
   }
   .code-modal-msg.ok{ color:#34D399; }
   .code-modal-msg.err{ color:#F87171; }
+      .code-modal-status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    justify-content:center;
+    margin-top:14px;
+  }
+  .status-dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:transparent;
+    flex-shrink:0;
+    transition:background 0.2s ease, box-shadow 0.2s ease;
+  }
+  .status-dot.ok{
+    background:#34D399;
+    box-shadow:0 0 8px rgba(52,211,153,0.7);
+  }
+  .status-dot.err{
+    background:#F87171;
+    box-shadow:0 0 8px rgba(248,113,113,0.7);
+  }
   .founder-badge{
     display:inline-flex;
     align-items:center;
@@ -1969,9 +1992,12 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
     <div class="code-modal-close" onclick="closeCodeModal()">&times;</div>
     <div class="code-modal-kicker">Founders Club</div>
     <div class="code-modal-title">Ingresa tu código</div>
-    <input type="text" id="codeInput" class="code-modal-input" placeholder="TEM-0000" maxlength="8">
+    <input type="text" id="codeInput" class="code-modal-input" placeholder="TEM-0000" maxlength="16">
     <button type="button" class="code-modal-btn" onclick="validateCode()">Validar código</button>
-    <div id="codeModalMsg" class="code-modal-msg"></div>
+ <div class="code-modal-status">
+  <span id="codeStatusDot" class="status-dot"></span>
+  <div id="codeModalMsg" class="code-modal-msg"></div>
+</div>
   </div>
 </div>
 <script>
@@ -2126,40 +2152,59 @@ const diamondRedImages = [
   };
 
 // ============ SISTEMA DE CÓDIGOS FOUNDERS CLUB ============
-const CODIGO_MADRE = "TEM-poral2702";
+CODIGO_MADRE = "TEM-PORAL2702"
 const validDNIs = ["2733","5310","7454","0896","1728","8166","7122","0153","6580"];
 const CODE_PREFIX = "TEM-";
-const MAX_USES = 3;
 const MAX_FOUNDER_DROP = 3;
+const MAX_ATTEMPTS = 3;
+const LOCKOUT_MS = 12 * 60 * 60 * 1000;
 
-function getUsageMap(){
-  try{ return JSON.parse(localStorage.getItem('temporalCodeUsage')) || {}; }
-  catch(e){ return {}; }
-}
-function saveUsageMap(map){
-  localStorage.setItem('temporalCodeUsage', JSON.stringify(map));
-}
+let activeCodeMemory = null;
+
 function getActiveCode(){
-  return localStorage.getItem('temporalActiveCode') || null;
+  return activeCodeMemory;
 }
 function setActiveCode(code){
-  localStorage.setItem('temporalActiveCode', code);
+  activeCodeMemory = code;
+}
+
+function getAttemptData(){
+  try{ return JSON.parse(localStorage.getItem('temporalCodeAttempts')) || {count:0, lockUntil:0}; }
+  catch(e){ return {count:0, lockUntil:0}; }
+}
+function saveAttemptData(data){
+  localStorage.setItem('temporalCodeAttempts', JSON.stringify(data));
+}
+function registrarIntentoFallido(){
+  const data = getAttemptData();
+  data.count = (data.count || 0) + 1;
+  if(data.count >= MAX_ATTEMPTS){
+    data.lockUntil = Date.now() + LOCKOUT_MS;
+    data.count = 0;
+  }
+  saveAttemptData(data);
+}
+function resetIntentos(){
+  saveAttemptData({count:0, lockUntil:0});
+}
+function horasRestantes(lockUntil){
+  return Math.ceil((lockUntil - Date.now()) / (60*60*1000));
 }
 
 function openCodeModal(e){
   if(e) e.preventDefault();
   document.getElementById('codeModal').classList.add('active');
   document.body.style.overflow = 'hidden';
-  const active = getActiveCode();
   const msg = document.getElementById('codeModalMsg');
-
-  if(active){
-    const usage = getUsageMap();
-    const used = usage[active] || 0;
-    msg.className = 'code-modal-msg ok';
-    msg.textContent = 'Código activo: ' + active + ' — usos restantes: ' + (MAX_USES - used) + '/' + MAX_USES;
+  const dot = document.getElementById('codeStatusDot');
+  const data = getAttemptData();
+  if(data.lockUntil > Date.now()){
+    msg.className = 'code-modal-msg err';
+    dot.className = 'status-dot err';
+    msg.textContent = 'Demasiados intentos. Vuelve a intentar en ' + horasRestantes(data.lockUntil) + ' horas.';
   } else {
     msg.textContent = '';
+    dot.className = 'status-dot';
   }
 }
 function closeCodeModal(){
@@ -2170,50 +2215,56 @@ function closeCodeModal(){
 function validateCode(){
   const input = document.getElementById('codeInput').value.trim().toUpperCase();
   const msg = document.getElementById('codeModalMsg');
+      const dot = document.getElementById('codeStatusDot');
+  const data = getAttemptData();
+
+  if(data.lockUntil > Date.now()){
+    msg.className = 'code-modal-msg err';
+        dot.className = 'status-dot err';
+    msg.textContent = 'Demasiados intentos. Vuelve a intentar en ' + horasRestantes(data.lockUntil) + ' horas.';
+    return;
+  }
 
   if(input === CODIGO_MADRE){
     setActiveCode(input);
+    resetIntentos();
     msg.className = 'code-modal-msg ok';
+        dot.className = 'status-dot ok';
     msg.textContent = '¡Código válido! Precio preventa desbloqueado hasta el Drop 03.';
     if(document.getElementById('lightbox').classList.contains('active')) renderPriceBlock();
     return;
   }
+
   if(!/^TEM-\d{4}$/.test(input)){
+    registrarIntentoFallido();
     msg.className = 'code-modal-msg err';
+        dot.className = 'status-dot err';
     msg.textContent = 'Formato inválido. Usa TEM-0000 (últimos 4 dígitos de tu DNI).';
     return;
   }
 
   const last4 = input.replace(CODE_PREFIX, '');
   if(!validDNIs.includes(last4)){
+    registrarIntentoFallido();
     msg.className = 'code-modal-msg err';
+        dot.className = 'status-dot err';
     msg.textContent = 'Código no reconocido. Verifica tu código Founders Club.';
     return;
   }
 
-  const usage = getUsageMap();
-  const used = usage[input] || 0;
-  if(used >= MAX_USES){
-    msg.className = 'code-modal-msg err';
-    msg.textContent = 'Este código ya alcanzó el límite de ' + MAX_USES + ' usos.';
-    return;
-  }
-
   setActiveCode(input);
+  resetIntentos();
   msg.className = 'code-modal-msg ok';
-  msg.textContent = '¡Código válido! Precio preventa desbloqueado — usos restantes: ' + (MAX_USES - used) + '/' + MAX_USES;
+    dot.className = 'status-dot ok';
+  msg.textContent = '¡Código válido! Precio preventa desbloqueado hasta el Drop 03.';
   if(document.getElementById('lightbox').classList.contains('active')){
     renderPriceBlock();
   }
 }
 
 function founderPriceApplies(product){
-  const active = getActiveCode();
-  if(!active) return false;
-  if((product.drop || 1) > MAX_FOUNDER_DROP) return false;
-  const usage = getUsageMap();
-  const used = usage[active] || 0;
-  return used < MAX_USES;
+  if(!getActiveCode()) return false;
+  return (product.drop || 1) <= MAX_FOUNDER_DROP;
 }
 
 function renderPriceBlock(){
@@ -2510,11 +2561,8 @@ document.getElementById('payBtn').addEventListener('click', function(){
     const finalPrice = isFounder ? p.priceNew : p.priceOld;
     const activeCode = getActiveCode();
     let codeLine = '';
-    if(isFounder && activeCode){
-      const usage = getUsageMap();
-      usage[activeCode] = (usage[activeCode] || 0) + 1;
-      saveUsageMap(usage);
-      codeLine = '- Código Founders: ' + activeCode + ' (uso ' + usage[activeCode] + '/' + MAX_USES + ')\n';
+      if(isFounder && activeCode){
+      codeLine = '- Código Founders: ' + activeCode + '\n';
     }
 
     const orderText =
