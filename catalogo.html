@@ -2197,11 +2197,20 @@ function openCodeModal(e){
   document.body.style.overflow = 'hidden';
   const msg = document.getElementById('codeModalMsg');
   const dot = document.getElementById('codeStatusDot');
+  const input = document.getElementById('codeInput');
   const data = getAttemptData();
   if(data.lockUntil > Date.now()){
     msg.className = 'code-modal-msg err';
     dot.className = 'status-dot err';
     msg.textContent = 'Demasiados intentos. Vuelve a intentar en ' + horasRestantes(data.lockUntil) + ' horas.';
+    return;
+  }
+  const active = getActiveCode();
+  if(active){
+    input.value = active;
+    msg.className = 'code-modal-msg ok';
+    dot.className = 'status-dot ok';
+    msg.textContent = 'Código activo: ' + active + '. Precio preventa desbloqueado.';
   } else {
     msg.textContent = '';
     dot.className = 'status-dot';
