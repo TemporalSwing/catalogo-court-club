@@ -1615,6 +1615,31 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
   .strip-bg-4{ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg'); background-size:100% 706.77%; background-position:center 52.74%; }
   .strip-bg-5{ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg'); background-size:100% 436.68%; background-position:center 77.08%; }
   .strip-bg-6{ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-court-club/main/court_club_strip.jpg'); background-size:100% 565.87%; background-position:center 100%; } 
+    .checkout-block, .checkout-block.visible{ display:none !important; }
+.add-cart-btn{ width:100%; padding:13px; border-radius:100px; border:1px solid var(--celeste); background:var(--celeste); color:var(--navy); font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.04em; cursor:pointer; margin-top:6px; margin-bottom:10px; }
+.cart-note{ font-size:12px; min-height:18px; margin-bottom:16px; color:#34D399; }
+.cart-note.err{ color:#F87171; }
+.cart-note a{ color:var(--celeste); text-decoration:underline; cursor:pointer; }
+.cart-badge{ position:absolute; top:-6px; right:-6px; min-width:18px; height:18px; border-radius:9px; background:var(--celeste); color:var(--navy); font-size:10px; font-weight:700; display:none; align-items:center; justify-content:center; padding:0 4px; font-family:'Space Grotesk',sans-serif; }
+.cart-panel{ position:fixed; inset:0; z-index:2050; display:none; background:rgba(3,4,5,0.92); overflow-y:auto; -webkit-overflow-scrolling:touch; padding:calc(24px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom)); }
+.cart-panel.active{ display:block; }
+.cart-box{ max-width:460px; margin:0 auto; background:rgba(15,17,19,0.95); border:1px solid var(--glass-border); border-radius:16px; padding:24px 20px; }
+.cart-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+.cart-title{ font-family:'Fraunces',serif; font-size:22px; font-weight:500; }
+.cart-close{ font-size:28px; cursor:pointer; opacity:0.7; line-height:1; }
+.cart-empty{ text-align:center; padding:30px 0; opacity:0.6; font-size:13px; }
+.cart-item{ display:grid; grid-template-columns:1fr auto auto 18px; gap:10px; align-items:center; padding:12px 0; border-top:1px solid var(--glass-border); }
+.cart-item-name{ font-family:'Fraunces',serif; font-size:15px; }
+.cart-item-meta{ font-size:11px; opacity:0.6; margin-top:3px; }
+.cart-qty{ display:flex; align-items:center; gap:8px; font-size:13px; }
+.cart-qty button{ width:26px; height:26px; border-radius:50%; border:1px solid var(--glass-border); background:transparent; color:var(--cristal); cursor:pointer; font-size:14px; }
+.cart-item-total{ font-weight:700; font-size:13px; min-width:56px; text-align:right; }
+.cart-remove{ cursor:pointer; opacity:0.5; font-size:18px; line-height:1; }
+.cart-code-link{ display:inline-block; margin:14px 0 4px; font-size:12px; color:#C9A063; text-decoration:underline; cursor:pointer; }
+.cart-totals{ border-top:1px solid var(--glass-border); padding-top:14px; margin:12px 0 20px; font-size:13px; }
+.cart-totals .row{ display:flex; justify-content:space-between; margin-bottom:6px; }
+.cart-totals .total{ font-size:18px; font-weight:700; }
+.cart-totals .save{ color:#34D399; font-size:12px; }
 </style>
 </head>
 <body>
@@ -1635,9 +1660,10 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
   </div>
 </div>
 <div class="social-fab-wrap">
-<a href="#" class="fab-btn fab-btn-cart" aria-label="Comprar" onclick="this.classList.add('cart-fill'); setTimeout(()=>this.classList.remove('cart-fill'), 500); openDrops(event);">
-  <span>Buy Now</span>
+<a href="#" class="fab-btn fab-btn-cart" aria-label="Carrito" onclick="openCart(event);">
+  <span>Carrito</span>
   <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+  <b class="cart-badge" id="cartBadge">0</b>
 </a>
  <div class="fab-btn-location" onclick="document.getElementById('locationMenu').classList.toggle('active')">
  <button class="fab-btn">
@@ -1962,7 +1988,9 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
   </div>
 </div>
 
-<div class="lightbox-reviews collapsed" id="lightboxReviews" style="display:none;">
+<button type="button" class="add-cart-btn" onclick="addToCart()">Agregar al carrito</button>
+<div class="cart-note" id="cartNote"></div>
+      <div class="lightbox-reviews collapsed" id="lightboxReviews" style="display:none;">
   <span class="reviews-label">Reseñas</span>
   <div id="reviewsList"></div>
 <div class="reviews-cta">¿Ya compraste? Envíanos tu reseña por <a href="https://wa.link/yn4dq2" target="_blank">WhatsApp</a> y recibe 10% de descuento en tu próxima compra.</div>
@@ -1987,7 +2015,33 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
 
   </div>
 </div>
-<div id="codeModal" class="code-modal">
+<div id="cartPanel" class="cart-panel">
+  <div class="cart-box">
+    <div class="cart-head">
+      <span class="cart-title">Tu carrito</span>
+      <span class="cart-close" onclick="closeCart()">&times;</span>
+    </div>
+    <div id="cartItems"></div>
+    <div id="cartCodeRow"></div>
+    <div id="cartTotals"></div>
+    <div id="cartCheckout" style="display:none;">
+      <div class="checkout-fields">
+        <span class="block-label">Tus datos</span>
+        <input type="email" id="cartEmail" placeholder="Correo electrónico">
+        <input type="text" id="cartAddress" placeholder="Dirección de envío">
+        <input type="tel" id="cartPhone" placeholder="Número celular">
+      </div>
+      <span class="block-label" style="margin-top:20px;display:block;">Método de pago</span>
+      <div class="payment-options" id="cartPaymentOptions">
+        <div class="payment-pill" data-method="yape">Yape</div>
+        <div class="payment-pill" data-method="bcp">Transferencia BCP</div>
+      </div>
+      <div class="payment-details" id="cartPaymentDetails"></div>
+      <button type="button" class="pay-btn" id="cartPayBtn" style="margin-top:20px;">Enviar pedido por WhatsApp</button>
+    </div>
+  </div>
+</div>
+  <div id="codeModal" class="code-modal">
   <div class="code-modal-box">
     <div class="code-modal-close" onclick="closeCodeModal()">&times;</div>
     <div class="code-modal-kicker">Founders Club</div>
@@ -2641,6 +2695,183 @@ document.addEventListener('click', function(e){
   const target = e.target.closest('button, a.cta, a.buy-now-btn, .fab-btn, .drops-list-item, .enter-btn, .lightbox-arrow, .lightbox-close, .drops-close');
   if(target){ playClickSound(); }
 }, true);
+// ============ CARRITO ============
+const CART_KEY = 'temporalCart';
+let cart = [];
+let cartPayment = null;
+let cartPrevOverflow = '';
+
+function loadCart(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(CART_KEY));
+    if(Array.isArray(saved)) cart = saved.filter(i => products[i.id] && i.qty > 0);
+  }catch(e){ cart = []; }
+}
+function saveCart(){
+  try{ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }catch(e){}
+}
+function priceNum(str){ return parseInt(String(str).replace(/\D/g,''), 10) || 0; }
+function regularPrice(id){ return priceNum(PRICES[products[id].drop || 1].regular); }
+function unitPrice(id){
+  const t = PRICES[products[id].drop || 1];
+  return priceNum(founderPriceApplies(products[id]) ? t.founder : t.regular);
+}
+function cartCount(){ return cart.reduce((s,i) => s + i.qty, 0); }
+function cartTotal(){ return cart.reduce((s,i) => s + unitPrice(i.id) * i.qty, 0); }
+function cv(id){ return document.getElementById(id).value.trim(); }
+
+function updateCartBadge(){
+  const b = document.getElementById('cartBadge');
+  const n = cartCount();
+  b.textContent = n;
+  b.style.display = n > 0 ? 'flex' : 'none';
+}
+
+function addToCart(){
+  const note = document.getElementById('cartNote');
+  if(!selectedSize){
+    note.className = 'cart-note err';
+    note.textContent = 'Elige tu talla primero.';
+    return;
+  }
+  const found = cart.find(i => i.id === currentProduct && i.size === selectedSize);
+  if(found){ found.qty += 1; } else { cart.push({id: currentProduct, size: selectedSize, qty: 1}); }
+  saveCart();
+  updateCartBadge();
+  note.className = 'cart-note';
+  note.innerHTML = 'Agregado ✓ · <a onclick="closeGallery();openCart();">Ver carrito</a>';
+}
+
+function changeQty(idx, d){
+  cart[idx].qty += d;
+  if(cart[idx].qty <= 0) cart.splice(idx, 1);
+  saveCart(); updateCartBadge(); renderCart();
+}
+function removeItem(idx){
+  cart.splice(idx, 1);
+  saveCart(); updateCartBadge(); renderCart();
+}
+
+function openCart(e){
+  if(e) e.preventDefault();
+  cartPrevOverflow = document.body.style.overflow;
+  document.getElementById('cartPanel').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  renderCart();
+}
+function closeCart(){
+  document.getElementById('cartPanel').classList.remove('active');
+  document.body.style.overflow = cartPrevOverflow;
+}
+
+function renderCartPayment(){
+  const box = document.getElementById('cartPaymentDetails');
+  if(!cartPayment){ box.classList.remove('visible'); box.innerHTML = ''; return; }
+  const acc = paymentAccounts[cartPayment];
+  box.innerHTML = acc.html + '<br>Monto a pagar: <strong>S/ ' + cartTotal() + '</strong><br><span class="copy-hint" id="cartCopyBtn">Copiar datos</span>';
+  box.classList.add('visible');
+  document.getElementById('cartCopyBtn').onclick = function(){
+    navigator.clipboard.writeText(acc.raw).then(() => {
+      this.textContent = '¡Copiado!';
+      setTimeout(() => { this.textContent = 'Copiar datos'; }, 1500);
+    });
+  };
+}
+
+function updateCartPayBtn(){
+  const ok = cart.length && cartPayment && cv('cartEmail') && cv('cartAddress') && cv('cartPhone');
+  document.getElementById('cartPayBtn').classList.toggle('ready', !!ok);
+}
+
+function renderCart(){
+  const itemsEl = document.getElementById('cartItems');
+  const totalsEl = document.getElementById('cartTotals');
+  const codeEl = document.getElementById('cartCodeRow');
+  const checkoutEl = document.getElementById('cartCheckout');
+  if(!cart.length){
+    itemsEl.innerHTML = '<div class="cart-empty">Tu carrito está vacío.</div>';
+    totalsEl.innerHTML = '';
+    codeEl.innerHTML = '';
+    checkoutEl.style.display = 'none';
+    return;
+  }
+  checkoutEl.style.display = 'block';
+  itemsEl.innerHTML = cart.map((i, idx) =>
+    '<div class="cart-item">' +
+      '<div><div class="cart-item-name">' + products[i.id].alt + '</div><div class="cart-item-meta">Talla ' + i.size + ' · S/ ' + unitPrice(i.id) + '</div></div>' +
+      '<div class="cart-qty"><button type="button" onclick="changeQty(' + idx + ',-1)">−</button><span>' + i.qty + '</span><button type="button" onclick="changeQty(' + idx + ',1)">+</button></div>' +
+      '<div class="cart-item-total">S/ ' + (unitPrice(i.id) * i.qty) + '</div>' +
+      '<div class="cart-remove" onclick="removeItem(' + idx + ')">&times;</div>' +
+    '</div>'
+  ).join('');
+  codeEl.innerHTML = getActiveCode()
+    ? '<div class="founder-badge" style="margin-top:14px;">✓ Founders Club · Precio preventa</div>'
+    : '<a class="cart-code-link" onclick="openCodeModal()">¿Tienes código?</a>';
+  const saved = cart.reduce((s, i) => s + (regularPrice(i.id) - unitPrice(i.id)) * i.qty, 0);
+  totalsEl.innerHTML = '<div class="cart-totals">' +
+    (saved > 0 ? '<div class="row save"><span>Ahorras</span><span>S/ ' + saved + '</span></div>' : '') +
+    '<div class="row total"><span>Total</span><span>S/ ' + cartTotal() + '</span></div></div>';
+  document.querySelectorAll('#cartPaymentOptions .payment-pill').forEach(p => {
+    p.classList.toggle('selected', p.dataset.method === cartPayment);
+  });
+  renderCartPayment();
+  updateCartPayBtn();
+}
+
+document.getElementById('cartPaymentOptions').addEventListener('click', function(e){
+  const pill = e.target.closest('.payment-pill');
+  if(!pill) return;
+  cartPayment = pill.dataset.method;
+  document.querySelectorAll('#cartPaymentOptions .payment-pill').forEach(p => {
+    p.classList.toggle('selected', p === pill);
+  });
+  renderCartPayment();
+  updateCartPayBtn();
+});
+
+['cartEmail','cartAddress','cartPhone'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateCartPayBtn);
+});
+
+document.getElementById('cartPayBtn').addEventListener('click', function(){
+  if(!this.classList.contains('ready')) return;
+  const now = new Date();
+  const orderNo = 'PED-' + String(now.getDate()).padStart(2,'0') + String(now.getMonth()+1).padStart(2,'0') + '-' + Math.floor(100 + Math.random() * 900);
+  const code = getActiveCode();
+  const isFounder = cart.some(i => founderPriceApplies(products[i.id]));
+  const lines = cart.map(i =>
+    '• ' + products[i.id].alt + ' | Talla ' + i.size + ' | x' + i.qty + ' | S/ ' + (unitPrice(i.id) * i.qty)
+  ).join('\n');
+  const methodLabel = cartPayment === 'yape' ? 'Yape' : 'Transferencia BCP';
+  const text =
+    'Hola TÉMPORAL! Quiero confirmar mi pedido ' + orderNo + ':\n\n' +
+    lines + '\n\n' +
+    (isFounder && code ? 'Código Founders: ' + code + '\n' : '') +
+    'Total: S/ ' + cartTotal() + '\n' +
+    'Método de pago: ' + methodLabel + '\n' +
+    'Correo: ' + cv('cartEmail') + '\n' +
+    'Dirección de envío: ' + cv('cartAddress') + '\n' +
+    'Celular: ' + cv('cartPhone') + '\n\n' +
+    '(Adjunto mi comprobante de pago)\n' +
+    'Sujeto a confirmación de stock.';
+  window.open('https://wa.me/51926675151?text=' + encodeURIComponent(text), '_blank');
+});
+
+// Limpia el aviso "Agregado" al abrir otra prenda
+const _openGallery = openGallery;
+openGallery = function(a, b){
+  _openGallery(a, b);
+  document.getElementById('cartNote').textContent = '';
+};
+// Recalcula el carrito al cerrar el modal de código
+const _closeCodeModal = closeCodeModal;
+closeCodeModal = function(){
+  _closeCodeModal();
+  renderCart();
+};
+
+loadCart();
+updateCartBadge();
 </script>
 
 </body>
