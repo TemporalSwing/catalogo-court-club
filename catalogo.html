@@ -1979,9 +1979,17 @@ background-image:url('https://raw.githubusercontent.com/TemporalSwing/catalogo-c
         <span class="price-new">S/ 59</span>
         <span class="price-old">S/ 79</span>
       </div>
-<div class="size-selector-block">
-  <span class="block-label">Talla</span>
-  <div class="sizes" id="sizeSelector">
+ <div class="size-selector-block" id="pieceBlock" style="display:none;">
+  <span class="block-label">Qué quieres llevar</span>
+  <div class="sizes" id="pieceSelector">
+    <button type="button" class="size-pill piece-pill selected" data-piece="set">Conjunto</button>
+    <button type="button" class="size-pill piece-pill" data-piece="polera">Solo polera</button>
+    <button type="button" class="size-pill piece-pill" data-piece="pantalon">Solo pantalón</button>
+  </div>
+</div>
+ <div class="size-selector-block">
+   <span class="block-label">Talla</span>
+      <div class="sizes" id="sizeSelector">
     <button type="button" class="size-pill" data-size="S">S</button>
     <button type="button" class="size-pill" data-size="M">M</button>
     <button type="button" class="size-pill" data-size="L">L</button>
@@ -2214,7 +2222,11 @@ const MAX_FOUNDER_DROP = 3;
   1: { regular: 'S/ 179', founder: 'S/ 159' },
   2: { regular: 'S/ 69',  founder: 'S/ 59'  }
 };
-const MAX_ATTEMPTS = 3;
+const PIECE_PRICES = {
+  polera:   { label: 'Polera',   regular: 129, founder: 119 },
+  pantalon: { label: 'Pantalón', regular: 69,  founder: 59 }
+};
+  const MAX_ATTEMPTS = 3;
 const LOCKOUT_MS = 12 * 60 * 60 * 1000;
 
 let activeCodeMemory = null;
@@ -2337,16 +2349,20 @@ function founderPriceApplies(product){
 function renderPriceBlock(){
   const p = products[currentProduct];
   const priceRow = document.querySelector('.lightbox-buy-price');
+  const piece = isDrop1(currentProduct) ? selectedPiece : 'set';
   const t = PRICES[p.drop || 1];
   const isFounder = founderPriceApplies(p);
+  let regular, founder;
+  if(piece === 'set'){ regular = t.regular; founder = t.founder; }
+  else { regular = 'S/ ' + PIECE_PRICES[piece].regular; founder = 'S/ ' + PIECE_PRICES[piece].founder; }
   if(isFounder){
     priceRow.innerHTML =
       '<div class="founder-badge">✓ Founders Club</div>' +
-      '<div style="display:flex;align-items:baseline;gap:10px;"><span class="price-new">' + t.founder + '</span></div>' +
+      '<div style="display:flex;align-items:baseline;gap:10px;"><span class="price-new">' + founder + '</span></div>' +
       '<div class="price-caption">Precio preventa</div>';
   } else {
     priceRow.innerHTML =
-      '<div style="display:flex;align-items:baseline;gap:10px;"><span class="price-new" style="color:var(--cristal);">' + t.regular + '</span><span class="price-old">' + t.founder + '</span></div>';
+      '<div style="display:flex;align-items:baseline;gap:10px;"><span class="price-new" style="color:var(--cristal);">' + regular + '</span><span class="price-old">' + founder + '</span></div>';
   }
 }
 // ============ FIN SISTEMA FOUNDERS ============
@@ -2453,6 +2469,10 @@ function renderProductInfo(){
   document.getElementById('lightboxStoryText').textContent = p.story;
   document.getElementById('lightboxBuyName').innerHTML = p.name;
   renderReviews(currentProduct);
+
+    selectedPiece = 'set';
+  document.querySelectorAll('.piece-pill').forEach(b => b.classList.toggle('selected', b.dataset.piece === 'set'));
+  document.getElementById('pieceBlock').style.display = isDrop1(currentProduct) ? 'block' : 'none';
   renderPriceBlock();
 }
 
@@ -2572,13 +2592,23 @@ function renderProductInfo(){
     }
   }
 
-let selectedSize = null;
+let selectedPiece = 'set';
+function isDrop1(id){ return (products[id].drop || 1) === 1; }
+function pieceUnit(id, piece){
+  if(piece === 'set'){
+    const t = PRICES[products[id].drop || 1];
+    return priceNum(founderPriceApplies(products[id]) ? t.founder : t.regular);
+  }
+  const pp = PIECE_PRICES[piece];
+  return founderPriceApplies(products[id]) ? pp.founder : pp.regular;
+}
+  let selectedSize = null;
 let selectedPayment = null;
 
 function resetCheckout(){
   selectedSize = null;
   selectedPayment = null;
-  document.querySelectorAll('.size-pill').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('#sizeSelector .size-pill').forEach(b => b.classList.remove('selected'));
   document.querySelectorAll('.payment-pill').forEach(p => p.classList.remove('selected'));
   renderPaymentDetails(null);
 
@@ -2587,11 +2617,18 @@ function resetCheckout(){
   document.getElementById('checkoutPhone').value = '';
   updatePayButton();
 }
-
+document.getElementById('pieceSelector').addEventListener('click', function(e){
+  const btn = e.target.closest('.piece-pill');
+  if(!btn) return;
+  document.querySelectorAll('.piece-pill').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedPiece = btn.dataset.piece;
+  renderPriceBlock();
+});
 document.getElementById('sizeSelector').addEventListener('click', function(e){
   const btn = e.target.closest('.size-pill');
   if(!btn) return;
-  document.querySelectorAll('.size-pill').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('#sizeSelector .size-pill').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
   selectedSize = btn.dataset.size;
   document.getElementById('checkoutBlock').classList.add('visible');
@@ -2711,13 +2748,16 @@ function saveCart(){
   try{ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }catch(e){}
 }
 function priceNum(str){ return parseInt(String(str).replace(/\D/g,''), 10) || 0; }
-function regularPrice(id){ return priceNum(PRICES[products[id].drop || 1].regular); }
-function unitPrice(id){
-  const t = PRICES[products[id].drop || 1];
-  return priceNum(founderPriceApplies(products[id]) ? t.founder : t.regular);
+function regularPrice(id, piece){
+  piece = piece || 'set';
+  if(piece !== 'set') return PIECE_PRICES[piece].regular;
+  return priceNum(PRICES[products[id].drop || 1].regular);
+}
+function unitPrice(id, piece){
+  return pieceUnit(id, piece || 'set');
 }
 function cartCount(){ return cart.reduce((s,i) => s + i.qty, 0); }
-function cartTotal(){ return cart.reduce((s,i) => s + unitPrice(i.id) * i.qty, 0); }
+function cartTotal(){ return cart.reduce((s,i) => s + unitPrice(i.id, i.piece) * i.qty, 0); }
 function cv(id){ return document.getElementById(id).value.trim(); }
 
 function updateCartBadge(){
@@ -2734,14 +2774,14 @@ function addToCart(){
     note.textContent = 'Elige tu talla primero.';
     return;
   }
-  const found = cart.find(i => i.id === currentProduct && i.size === selectedSize);
-  if(found){ found.qty += 1; } else { cart.push({id: currentProduct, size: selectedSize, qty: 1}); }
+  const piece = isDrop1(currentProduct) ? selectedPiece : 'set';
+  const found = cart.find(i => i.id === currentProduct && i.size === selectedSize && (i.piece || 'set') === piece);
+  if(found){ found.qty += 1; } else { cart.push({id: currentProduct, size: selectedSize, piece: piece, qty: 1}); }
   saveCart();
   updateCartBadge();
   note.className = 'cart-note';
   note.innerHTML = 'Agregado ✓ · <a onclick="closeGallery();openCart();">Ver carrito</a>';
 }
-
 function changeQty(idx, d){
   cart[idx].qty += d;
   if(cart[idx].qty <= 0) cart.splice(idx, 1);
@@ -2782,7 +2822,10 @@ function updateCartPayBtn(){
   const ok = cart.length && cartPayment && cv('cartEmail') && cv('cartAddress') && cv('cartPhone');
   document.getElementById('cartPayBtn').classList.toggle('ready', !!ok);
 }
-
+function pieceTag(i){
+  if(!i.piece || i.piece === 'set') return '';
+  return ' (' + PIECE_PRICES[i.piece].label + ')';
+}
 function renderCart(){
   const itemsEl = document.getElementById('cartItems');
   const totalsEl = document.getElementById('cartTotals');
@@ -2798,16 +2841,16 @@ function renderCart(){
   checkoutEl.style.display = 'block';
   itemsEl.innerHTML = cart.map((i, idx) =>
     '<div class="cart-item">' +
-      '<div><div class="cart-item-name">' + products[i.id].alt + '</div><div class="cart-item-meta">Talla ' + i.size + ' · S/ ' + unitPrice(i.id) + '</div></div>' +
+      '<div><div class="cart-item-name">' + products[i.id].alt + pieceTag(i) + '</div><div class="cart-item-meta">Talla ' + i.size + ' · S/ ' + unitPrice(i.id, i.piece) + '</div></div>' +
       '<div class="cart-qty"><button type="button" onclick="changeQty(' + idx + ',-1)">−</button><span>' + i.qty + '</span><button type="button" onclick="changeQty(' + idx + ',1)">+</button></div>' +
-      '<div class="cart-item-total">S/ ' + (unitPrice(i.id) * i.qty) + '</div>' +
+      '<div class="cart-item-total">S/ ' + (unitPrice(i.id, i.piece) * i.qty) + '</div>' +
       '<div class="cart-remove" onclick="removeItem(' + idx + ')">&times;</div>' +
     '</div>'
   ).join('');
   codeEl.innerHTML = getActiveCode()
     ? '<div class="founder-badge" style="margin-top:14px;">✓ Founders Club · Precio preventa</div>'
     : '<a class="cart-code-link" onclick="openCodeModal()">¿Tienes código?</a>';
-  const saved = cart.reduce((s, i) => s + (regularPrice(i.id) - unitPrice(i.id)) * i.qty, 0);
+  const saved = cart.reduce((s, i) => s + (regularPrice(i.id, i.piece) - unitPrice(i.id, i.piece)) * i.qty, 0);
   totalsEl.innerHTML = '<div class="cart-totals">' +
     (saved > 0 ? '<div class="row save"><span>Ahorras</span><span>S/ ' + saved + '</span></div>' : '') +
     '<div class="row total"><span>Total</span><span>S/ ' + cartTotal() + '</span></div></div>';
@@ -2840,7 +2883,7 @@ document.getElementById('cartPayBtn').addEventListener('click', function(){
   const code = getActiveCode();
   const isFounder = cart.some(i => founderPriceApplies(products[i.id]));
   const lines = cart.map(i =>
-    '• ' + products[i.id].alt + ' | Talla ' + i.size + ' | x' + i.qty + ' | S/ ' + (unitPrice(i.id) * i.qty)
+    '• ' + products[i.id].alt + pieceTag(i) + ' | Talla ' + i.size + ' | x' + i.qty + ' | S/ ' + (unitPrice(i.id, i.piece) * i.qty)
   ).join('\n');
   const methodLabel = cartPayment === 'yape' ? 'Yape' : 'Transferencia BCP';
   const text =
