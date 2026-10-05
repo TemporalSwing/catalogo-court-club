@@ -2153,9 +2153,13 @@ const diamondRedImages = [
 
 // ============ SISTEMA DE CÓDIGOS FOUNDERS CLUB ============
 CODIGO_MADRE = "TEM-PORAL2702"
-const validDNIs = ["2733","5310","7454","0896","1728","8166","7122","0153","6580"];
+const validDNIs = ["2733","5310","7454","0896","1728","8166","7122","0153","6580","1265"];
 const CODE_PREFIX = "TEM-";
 const MAX_FOUNDER_DROP = 3;
+  const PRICES = {
+  1: { regular: 'S/ 179', founder: 'S/ 159' },
+  2: { regular: 'S/ 69',  founder: 'S/ 59'  }
+};
 const MAX_ATTEMPTS = 3;
 const LOCKOUT_MS = 12 * 60 * 60 * 1000;
 
@@ -2279,11 +2283,17 @@ function founderPriceApplies(product){
 function renderPriceBlock(){
   const p = products[currentProduct];
   const priceRow = document.querySelector('.lightbox-buy-price');
+  const t = PRICES[p.drop || 1];
   const isFounder = founderPriceApplies(p);
-  const captionText = isFounder ? 'Precio Founders Club' : (p.priceCaption || '');
-  const captionHtml = captionText ? '<div class="price-caption">' + captionText + '</div>' : '';
-  const badgeHtml = isFounder ? '<div class="founder-badge">✓ Founders Club</div>' : '';
-  priceRow.innerHTML = badgeHtml + '<div style="display:flex;align-items:baseline;gap:10px;"><span class="price-new">' + p.priceNew + '</span><span class="price-old">' + p.priceOld + '</span></div>' + captionHtml;
+  if(isFounder){
+    priceRow.innerHTML =
+      '<div class="founder-badge">✓ Founders Club</div>' +
+      '<div style="display:flex;align-items:baseline;gap:10px;"><span class="price-new">' + t.founder + '</span></div>' +
+      '<div class="price-caption">Precio preventa</div>';
+  } else {
+    priceRow.innerHTML =
+      '<div style="display:flex;align-items:baseline;gap:10px;"><span class="price-new" style="color:var(--cristal);">' + t.regular + '</span><span class="price-old">' + t.founder + '</span></div>';
+  }
 }
 // ============ FIN SISTEMA FOUNDERS ============
 
@@ -2567,7 +2577,7 @@ document.getElementById('payBtn').addEventListener('click', function(){
   const methodLabel = selectedPayment === 'yape' ? 'Yape' : 'Transferencia BCP';
 
     const isFounder = founderPriceApplies(p);
-    const finalPrice = isFounder ? p.priceNew : p.priceOld;
+   const finalPrice = isFounder ? PRICES[p.drop || 1].founder : PRICES[p.drop || 1].regular;
     const activeCode = getActiveCode();
     let codeLine = '';
       if(isFounder && activeCode){
